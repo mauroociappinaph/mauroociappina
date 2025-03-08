@@ -6,9 +6,11 @@ import { useAuthRedirect } from "../../../hooks/useAuth.js";
 import { useUserStore } from "../stores/userStore";
 import { useAuth } from "../../../hooks/useAuth.js";
 import { useNavigate } from "react-router-dom";
+import { AxiosError } from "axios";
 
 const LoginPage = () => {
   useAuthRedirect();
+  const auth = useAuth();
 
   const navigate = useNavigate();
 
@@ -32,19 +34,22 @@ const LoginPage = () => {
       updateUser(userData);
 
       navigate("/postulations");
+      auth.updateUser(userData.data);
 
       console.log("Login exitoso:", userData);
-    } catch (error: any) {
-      if (error.response) {
-        console.error("Error en el backend:", error.response.data);
-
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        console.error("Error en el backend:", error.response?.data);
         setError({
-          error: error.response.data.error || "Error desconocido",
-          message: error.response.data.message || "Ocurrió un error",
+          error: error.response?.data?.error || "Error desconocido",
+          message: error.response?.data?.message || "Ocurrió un error",
         });
-      } else {
+      } else if (error instanceof Error) {
         console.error("Error en la petición:", error.message);
         setError({ message: "Error en la conexión con el servidor" });
+      } else {
+        console.error("Error desconocido:", error);
+        setError({ message: "Error inesperado" });
       }
     }
   };
