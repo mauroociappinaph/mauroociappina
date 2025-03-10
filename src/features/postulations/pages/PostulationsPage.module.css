@@ -24,6 +24,13 @@
   padding: 20px;
   background-color: #f9f9f9;
   max-width: 800px;
+  text-color: black;
+}
+
+.postulationsContainer p {
+  color: black;
+  text-color: black;
+  text-align: center;
 }
 
 .sidebar {
@@ -37,35 +44,38 @@
   gap: 20px;
 }
 
-p {
-  color: black;
-  text-align: center;
-}
-
-.filters {
+.modalBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 10px;
-  text-align: center;
   justify-content: center;
   align-items: center;
+  z-index: 1000;
 }
 
-.h2 {
-  text-align: center;
-  color: black;
+.modalContent {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1001;
+  max-width: 500px;
+  width: 90%;
 }
 
-.labelTitle {
-  text-align: center;
-  color: black;
-  padding: 5px;
-}
-
-.optionTitle {
-  padding: 5rem;
-  border-radius: 1rem;
+.closeButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
 }
 
 .addButton {
@@ -81,7 +91,7 @@ p {
   align-items: center;
   cursor: pointer;
   transition: background-color 0.3s;
-  margin-top: 20px; /* Espacio antes del botón */
+  margin-top: 16px;
 }
 
 .addButton:hover {
