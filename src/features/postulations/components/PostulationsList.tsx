@@ -18,12 +18,17 @@ const PostulationsList: React.FC = () => {
   return (
     <div>
       {postulations.map((post: Postulation) => (
-        <div key={post.id} className="postulation">
-          <h2>{post.position}</h2>
-          <p>Company: {post.company}</p>
-          <p>Date: {post.date}</p>
-          <p>Status: {post.status}</p>
-        </div>
+        <section key={post.id} className="postulation">
+          <ul>
+            <li>
+              <h2>{post.position}</h2>
+
+              <p>Company: {post.company}</p>
+              <p>Date: {post.date}</p>
+              <p>Status: {post.status}</p>
+            </li>
+          </ul>
+        </section>
       ))}
     </div>
   );
