@@ -2,11 +2,15 @@ import React, { useEffect } from "react";
 import { useUserStore } from "../../users/stores/userStore";
 import { usePostulationsStore } from "../stores/postulationsStore";
 import PostulationsList from "../components/PostulationsList";
-import styles from "./PostulationsPage.module.css"; // Importamos el archivo CSS
+import styles from "./PostulationsPage.module.css";
+import { Filters } from "../components/Filters";
+import { AddPostulationsForm } from "../components/AddPostulationForm.tsx";
+import { useState } from "react";
 
 const PostulationsPage: React.FC = () => {
   const userId = useUserStore((state) => state.userId);
   const postulations = usePostulationsStore((state) => state.postulations);
+  const [isClickedButton, setIsClickedButton] = useState(false);
 
   const { loading, fetchPostulations } = usePostulationsStore();
 
@@ -17,50 +21,50 @@ const PostulationsPage: React.FC = () => {
   if (loading) return <div>Loading...</div>;
 
   return (
-    <div className={styles.PostulationsPage}>
-      <h1 className={styles.title}>Postulations</h1>
-      <hr />
+    <main className={styles.PostulationsPage}>
+      <header>
+        <h1 className={styles.title}>Postulations</h1>
+        <hr />
+      </header>
 
-      <div className="flex justify-between">
-        <div className={styles.postulationsContainer}>
-          {postulations.length === 0 ? <p>No postulations yet</p> : null}
-          <PostulationsList />
-        </div>
+      <section className="flex justify-between">
+        <article className={styles.postulationsContainer}>
+          {postulations.length === 0 ? (
+            <p>No postulations yet</p>
+          ) : (
+            <PostulationsList />
+          )}
+        </article>
 
-        <div className={styles.sidebar}>
-          <h2 className={styles.h2}>Filters</h2>
-          {/* Aquí puedes agregar filtros según lo que necesites */}
-          <div className={styles.filters}>
-            <label className={styles.labelTitle} htmlFor="status-filter">
-              Status
-            </label>
-            <select id="status-filter" name="status-filter">
-              <option className={styles.optionTitle} value="all">
-                All
-              </option>
-              <option className={styles.optionTitle} value="pending">
-                Pendiente
-              </option>
-              <option className={styles.optionTitle} value="approved">
-                Aprobado
-              </option>
-              <option className={styles.optionTitle} value="rejected">
-                Rechazado
-              </option>
-            </select>
-            <label className={styles.labelTitle}>Posición</label>
-            <select id="position-filter" name="position-filter">
-              <option className={styles.optionTitle} value="todos">
-                Todos
-              </option>
-              <option>{}</option>
-            </select>
+        <aside className={styles.sidebar}>
+          <Filters />
+
+          <button
+            className={styles.addButton}
+            onClick={() => setIsClickedButton(true)}
+            aria-label="Add new postulation"
+          >
+            +
+          </button>
+        </aside>
+      </section>
+
+      {/* Modal para el formulario */}
+      {isClickedButton && (
+        <div className={styles.modalBackdrop}>
+          <div className={styles.modalContent}>
+            <button
+              className={styles.closeButton}
+              onClick={() => setIsClickedButton(false)}
+              aria-label="Close modal"
+            >
+              &times;
+            </button>
+            <AddPostulationsForm />
           </div>
-
-          <button className={styles.addButton}>+</button>
         </div>
-      </div>
-    </div>
+      )}
+    </main>
   );
 };
 
