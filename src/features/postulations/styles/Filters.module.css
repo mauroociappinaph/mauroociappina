@@ -1,0 +1,25 @@
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+
+.h2 {
+  text-align: center;
+  color: black;
+}
+
+.labelTitle {
+  text-align: center;
+  color: black;
+  padding: 5px;
+}
+
+.optionTitle {
+  padding: 5rem;
+  border-radius: 1rem;
+}
