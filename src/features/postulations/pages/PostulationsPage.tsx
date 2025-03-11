@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
-import { useUserStore } from "../../users/stores/userStore";
+import { useUserStore } from "../../../stores/userStore.ts";
 import { usePostulationsStore } from "../stores/postulationsStore";
 import PostulationsList from "../components/PostulationsList";
-import styles from "./PostulationsPage.module.css";
+import styles from "../styles/PostulationsPage.module.css";
 import { Filters } from "../components/Filters";
-import { AddPostulationsForm } from "../components/AddPostulationForm.tsx";
+import { AddPostulationForm } from "../components/AddPostulationForm.js";
+
 import { useState } from "react";
 
 const PostulationsPage: React.FC = () => {
@@ -34,6 +35,21 @@ const PostulationsPage: React.FC = () => {
           ) : (
             <PostulationsList />
           )}
+
+          {isClickedButton && (
+            <div className={styles.modalBackdrop}>
+              <div className={styles.modalContent}>
+                <button
+                  className={styles.closeButton}
+                  onClick={() => setIsClickedButton(false)}
+                  aria-label="Close modal"
+                >
+                  &times;
+                </button>
+                <AddPostulationForm />
+              </div>
+            </div>
+          )}
         </article>
 
         <aside className={styles.sidebar}>
@@ -48,22 +64,6 @@ const PostulationsPage: React.FC = () => {
           </button>
         </aside>
       </section>
-
-      {/* Modal para el formulario */}
-      {isClickedButton && (
-        <div className={styles.modalBackdrop}>
-          <div className={styles.modalContent}>
-            <button
-              className={styles.closeButton}
-              onClick={() => setIsClickedButton(false)}
-              aria-label="Close modal"
-            >
-              &times;
-            </button>
-            <AddPostulationsForm />
-          </div>
-        </div>
-      )}
     </main>
   );
 };
