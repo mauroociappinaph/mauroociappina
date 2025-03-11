@@ -1,5 +1,5 @@
 export interface Postulation {
-  id: string;
+  userId: string;
   date: string;
   position: string;
   company: string;
@@ -8,4 +8,3 @@ export interface Postulation {
   sendCv: boolean;
   sendEmail: boolean;
 }
-
