@@ -15,3 +15,14 @@ export const fetchPostulations = async (
     throw error;
   }
 };
+
+export const createPostulation = async (postulationData: Postulation) => {
+  try {
+    const response = await axios.post(`${api}/postulation`, postulationData);
+    console.log("createPostulation response", response.data.result);
+    return response.data.result;
+  } catch (error) {
+    console.error("Error creating postulation:", error);
+    throw error;
+  }
+};
