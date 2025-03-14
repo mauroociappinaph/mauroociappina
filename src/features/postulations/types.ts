@@ -1,9 +1,9 @@
 export interface Postulation {
   userId: string;
-  date: string;
+  applicationDate: string;
   position: string;
   company: string;
-  trough: string;
+  link: string;
   status: string;
   sendCv: boolean;
   sendEmail: boolean;
