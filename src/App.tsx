@@ -1,8 +1,7 @@
-import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import PostulationsPage from "./features/postulations/pages/PostulationsPage.tsx";
-import RegisterPage from "./features/users/pages/RegisterPage.tsx";
-import LoginPage from "./features/users/pages/LoginPage.tsx";
+import RegisterPage from "./features/auth/pages/RegisterPage.tsx";
+import LoginPage from "./features/auth/pages/LoginPage.tsx";
 import HomePage from "./features/home/HomePage";
 
 const App = () => {
