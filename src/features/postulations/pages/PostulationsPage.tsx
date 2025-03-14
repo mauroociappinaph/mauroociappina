@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { useUserStore } from "../../../stores/userStore.ts";
 import { usePostulationsStore } from "../stores/postulationsStore";
 import PostulationsList from "../components/PostulationsList";
 import styles from "../styles/PostulationsPage.module.css";
@@ -9,12 +8,12 @@ import { AddPostulationForm } from "../components/AddPostulationForm.js";
 import { useState } from "react";
 
 const PostulationsPage: React.FC = () => {
-  const userId = useUserStore((state) => state.userId);
   const postulations = usePostulationsStore((state) => state.postulations);
   const [isClickedButton, setIsClickedButton] = useState(false);
 
   const { loading, fetchPostulations } = usePostulationsStore();
 
+  const userId = localStorage.getItem("id");
   useEffect(() => {
     if (userId) fetchPostulations(userId);
   }, [userId, fetchPostulations]);
