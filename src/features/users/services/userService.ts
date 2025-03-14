@@ -4,9 +4,9 @@ const api = import.meta.env.VITE_API_URL;
 
 console.log(" ------------ API --------", api);
 
-export const createUserService = async (userData: object) => {
+export const updateUserService = async (id: string, userData: object) => {
   try {
-    const { data } = await axios.post(`${api}/user`, userData);
+    const { data } = await axios.patch(`${api}/user/${id}`, userData);
     console.log(" ------------ data --------", userData);
     if (data) {
       return "Ok";
