@@ -1,4 +1,4 @@
-import { useUserStore } from "../features/users/stores/userStore.js";
+import { useUserStore } from "../stores/userStore.ts";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
