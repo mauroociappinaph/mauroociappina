@@ -1,6 +1,5 @@
-import React from "react";
 import styles from "./HomePage.module.css";
-import { NavigationButton } from "../users/components/NavigationButton";
+import { NavigationButton } from "../../components/common/Button/NavigationButton";
 
 const HomePage = () => {
   return (
