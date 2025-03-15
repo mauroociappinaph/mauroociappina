@@ -35,8 +35,6 @@ const LoginPage = () => {
 
       navigate("/postulations");
       auth.updateUser(userData.data);
-
-      console.log("Login exitoso:", userData);
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
         console.error("Error en el backend:", error.response?.data);
