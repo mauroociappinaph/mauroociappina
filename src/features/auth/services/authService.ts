@@ -19,6 +19,8 @@ export const loginService = async (email: string, password: string) => {
     throw new Error(response.data.error);
   }
 
+  localStorage.setItem("id", response.data.data.id);
+
   return response.data;
 };
 
