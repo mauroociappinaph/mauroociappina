@@ -12,7 +12,7 @@ export const AddPostulationForm: React.FC = () => {
     link: "",
     recruiterContact: "",
     sendEmail: false,
-    sendCV: false,
+    sendCv: false,
     description: "",
     userId: useUserStore((state) => state.userId),
   });
@@ -43,11 +43,29 @@ export const AddPostulationForm: React.FC = () => {
     }));
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log("Datos de la postulación:", postulationData);
 
-    createPostulation(postulationData);
+    try {
+      await createPostulation(postulationData);
+      // Limpiar el formulario después de enviar
+      setPostulationData({
+        position: "",
+        company: "",
+        status: "Pendiente",
+        applicationDate: "",
+        link: "",
+        recruiterContact: "",
+        sendEmail: false,
+        sendCv: false,
+        description: "",
+        userId: "",
+      });
+      console.log("Postulación creada exitosamente");
+    } catch (error) {
+      console.error("Error al crear la postulación:", error);
+    }
   };
 
   return (
@@ -156,13 +174,13 @@ export const AddPostulationForm: React.FC = () => {
         <div className={styles.checkboxContainer}>
           <input
             type="checkbox"
-            id="sendCV"
-            name="sendCV"
+            id="sendCv"
+            name="sendCv"
             className={styles.checkbox}
-            checked={postulationData.sendCV}
+            checked={postulationData.sendCv}
             onChange={handleCheckboxChange}
           />
-          <label htmlFor="sendCV" className={styles.checkboxLabel}>
+          <label htmlFor="sendCv" className={styles.checkboxLabel}>
             Envié CV
           </label>
         </div>
