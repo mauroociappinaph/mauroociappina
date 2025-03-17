@@ -1,0 +1,80 @@
+/* CardStyle.module.css */
+.container {
+  display: grid;
+  gap: 1.5rem;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.postulationCard {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  border-left: 4px solid;
+}
+
+.postulationCard:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Colores diferentes para diferentes estados */
+.postulationCard[data-status="applied"] {
+  border-color: #3b82f6;
+}
+.postulationCard[data-status="interview"] {
+  border-color: #10b981;
+}
+.postulationCard[data-status="offer"] {
+  border-color: #f59e0b;
+}
+.postulationCard[data-status="rejected"] {
+  border-color: #ef4444;
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+}
+
+.detailItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  color: #4b5563;
+}
+
+.statusBadge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: capitalize;
+  background-color: #e5e7eb;
+  color: #1f2937;
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: #6b7280;
+}
+
+@media (min-width: 768px) {
+  .container {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+
+  .title {
+    font-size: 1.5rem;
+  }
+}
