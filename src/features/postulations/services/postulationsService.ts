@@ -1,5 +1,5 @@
-import axios from "axios";
 import { Postulation } from "../types";
+import axios from "axios";
 
 const api = import.meta.env.VITE_API_URL;
 
@@ -16,10 +16,6 @@ export const fetchPostulations = async (
 };
 
 export const createPostulation = async (postulationData: Postulation) => {
-  console.log(
-    " ------------------ createPostulation -----------------",
-    postulationData,
-  );
   try {
     const response = await axios.post(`${api}/postulation/`, postulationData);
     console.log("createPostulation response", response.data.result);
