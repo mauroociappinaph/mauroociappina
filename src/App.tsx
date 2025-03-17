@@ -9,7 +9,9 @@ const App = () => {
     <Router>
       <Routes>
         <Route path="/" element={<HomePage />} />
-        <Route path="/postulations" element={<PostulationsPage />} />
+        {localStorage.id ? (
+          <Route path="/postulations" element={<PostulationsPage />} />
+        ) : null}
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
         {/* Ruta para manejar páginas no encontradas */}
