@@ -1,5 +1,6 @@
 import React from "react";
 import { usePostulationsStore } from "../stores/postulationsStore";
+import styles from "../styles/CardStyle.module.css";
 
 interface Postulation {
   id: string;
@@ -13,22 +14,40 @@ interface Postulation {
 const PostulationsList: React.FC = () => {
   const { postulations, loading } = usePostulationsStore();
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <p className={styles.loading}>Loading postulations...</p>;
 
   return (
-    <div>
+    <div className={styles.container}>
       {postulations.map((post: Postulation) => (
-        <section key={post.id} className="postulation">
-          <ul>
-            <li>
-              <h2>{post.position}</h2>
+        <article
+          key={post.id}
+          className={styles.postulationCard}
+          data-status={post.status}
+        >
+          <h2 className={styles.title}>{post.position}</h2>
 
-              <p>Company: {post.company}</p>
-              <p>Date: {post.date}</p>
-              <p>Status: {post.status}</p>
-            </li>
-          </ul>
-        </section>
+          <div className={styles.detailItem}>
+            <span>Empresa: </span>
+            <p>{post.company}</p>
+          </div>
+
+          <div className={styles.detailItem}>
+            <span> Fecha de postulación:📅</span>
+            <p>{post.date}</p>
+          </div>
+
+          <div className={styles.detailItem}>
+            <span> Estado:📌</span>
+            <p className={styles.statusBadge}>{post.status}</p>
+          </div>
+
+          {post.result && (
+            <div className={styles.detailItem}>
+              <span>Resultado:📝</span>
+              <p>Result: {post.result}</p>
+            </div>
+          )}
+        </article>
       ))}
     </div>
   );
