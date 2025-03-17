@@ -7,7 +7,6 @@ console.log(" ------------ API --------", api);
 export const updateUserService = async (id: string, userData: object) => {
   try {
     const { data } = await axios.patch(`${api}/user/${id}`, userData);
-    console.log(" ------------ data --------", userData);
     if (data) {
       return "Ok";
     } else {
