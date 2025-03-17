@@ -1,20 +1,19 @@
 import React, { useState } from "react";
 import styles from "../styles/AddPostulationForm.module.css";
-import { useUserStore } from "../../../stores/userStore";
 import { createPostulation } from "../services/postulationsService.ts";
 
 export const AddPostulationForm: React.FC = () => {
   const [postulationData, setPostulationData] = useState({
     position: "",
     company: "",
-    status: "Pendiente",
+    status: "Pending Response",
     applicationDate: "",
     link: "",
     recruiterContact: "",
     sendEmail: false,
     sendCv: false,
     description: "",
-    userId: useUserStore((state) => state.userId),
+    userId: localStorage.getItem("id"),
   });
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,12 +47,14 @@ export const AddPostulationForm: React.FC = () => {
     console.log("Datos de la postulación:", postulationData);
 
     try {
-      await createPostulation(postulationData);
+      const postulacion = await createPostulation(postulationData);
+
+      console.log(" postulacion respuesta ", postulacion);
       // Limpiar el formulario después de enviar
       setPostulationData({
         position: "",
         company: "",
-        status: "Pendiente",
+        status: "Pending Response",
         applicationDate: "",
         link: "",
         recruiterContact: "",
