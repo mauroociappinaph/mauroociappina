@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { usePostulationsStore } from "../stores/postulationsStore";
 import PostulationsList from "../components/PostulationsList";
 import styles from "../styles/PostulationsPage.module.css";
+import Button from "../../../components/common/Button/Button.module.css";
 import { Filters } from "../components/Filters";
 import { AddPostulationForm } from "../components/AddPostulationForm.js";
 
@@ -23,46 +24,47 @@ const PostulationsPage: React.FC = () => {
   return (
     <main className={styles.PostulationsPage}>
       <header>
-        <h1 className={styles.title}>Postulations</h1>
+        <h1 className={styles.title}>Postulaciones</h1>
         <hr />
       </header>
 
-      <section className="flex justify-between">
-        <article className={styles.postulationsContainer}>
-          {postulations.length === 0 ? (
-            <p>No postulations yet</p>
-          ) : (
-            <PostulationsList />
-          )}
-
-          {isClickedButton && (
-            <div className={styles.modalBackdrop}>
-              <div className={styles.modalContent}>
-                <button
-                  className={styles.closeButton}
-                  onClick={() => setIsClickedButton(false)}
-                  aria-label="Close modal"
-                >
-                  &times;
-                </button>
-                <AddPostulationForm />
-              </div>
-            </div>
-          )}
-        </article>
-
-        <aside className={styles.sidebar}>
-          <Filters />
-
-          <button
-            className={styles.addButton}
-            onClick={() => setIsClickedButton(true)}
-            aria-label="Add new postulation"
-          >
-            +
-          </button>
-        </aside>
+      {/* Sección de Filtros */}
+      <section className={styles.filtersSection}>
+        <Filters />
       </section>
+
+      {/* Sección de Postulaciones */}
+      <section className={styles.postulationsSection}>
+        {postulations.length === 0 ? (
+          <p>No postulations yet</p>
+        ) : (
+          <PostulationsList />
+        )}
+
+        <button
+          className={Button.addButton}
+          onClick={() => setIsClickedButton(true)}
+          aria-label="Add new postulation"
+        >
+          +
+        </button>
+      </section>
+
+      {/* Modal para agregar postulación */}
+      {isClickedButton && (
+        <div className={styles.modalBackdrop}>
+          <div className={styles.modalContent}>
+            <button
+              className={styles.closeButton}
+              onClick={() => setIsClickedButton(false)}
+              aria-label="Close modal"
+            >
+              &times;
+            </button>
+            <AddPostulationForm />
+          </div>
+        </div>
+      )}
     </main>
   );
 };
