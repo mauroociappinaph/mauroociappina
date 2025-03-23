@@ -50,7 +50,6 @@ const PostulationsPage: React.FC = () => {
         </button>
       </section>
 
-      {/* Modal para agregar postulación */}
       {isClickedButton && (
         <div className={styles.modalBackdrop}>
           <div className={styles.modalContent}>
