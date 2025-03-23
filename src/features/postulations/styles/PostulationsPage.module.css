@@ -1,47 +1,28 @@
-/* PostulationsPage.css */
-
-.postulationsPage {
-  font-family: Arial, sans-serif;
+.PostulationsPage {
+  display: flex;
+  flex-direction: column; /* Apila los elementos verticalmente */
+  gap: 20px; /* Espacio entre las secciones */
   padding: 20px;
 }
 
 .title {
   text-align: center;
   font-size: 2rem;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
-.content-wrapper {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 20px;
-}
-
-.postulationsContainer {
-  flex: 1;
-  border: 1px solid #ddd;
+.filtersSection {
+  background-color: #fff;
   padding: 20px;
-  background-color: #f9f9f9;
-  max-width: 800px;
-  text-color: black;
-}
-
-.postulationsContainer p {
-  color: black;
-  text-color: black;
-  text-align: center;
-}
-
-.sidebar {
-  width: 300px;
-  padding: 20px;
-  border: 1px solid #ddd;
   border-radius: 8px;
-  background-color: #f4f4f4;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.postulationsSection {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .modalBackdrop {
@@ -50,22 +31,21 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(5px);
+  background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 2000; /* Asegura que el modal esté por encima de todo */
 }
 
 .modalContent {
-  background: white;
+  background-color: white;
   padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  z-index: 1001;
-  max-width: 500px;
+  border-radius: 8px;
   width: 90%;
+  max-width: 500px;
+  position: relative;
+  z-index: 2001; /* Asegura que el contenido del modal esté por encima del backdrop */
 }
 
 .closeButton {
@@ -74,30 +54,8 @@
   right: 10px;
   background: none;
   border: none;
-  font-size: 2rem;
-  cursor: pointer;
-}
-
-.addButton {
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  border: 2px solid #4caf50;
-  background-color: #4caf50;
-  color: white;
   font-size: 1.5rem;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   cursor: pointer;
-  transition: background-color 0.3s;
-  margin-top: 16px;
-}
-
-.addButton:hover {
-  background-color: #45a049;
-}
-
-.addButton:focus {
-  outline: none;
+  color: #000; /* Color del ícono de cerrar */
+  z-index: 2002; /* Asegura que el botón de cerrar esté por encima del contenido del modal */
 }
