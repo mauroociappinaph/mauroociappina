@@ -1,16 +1,20 @@
 .filters {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 10px;
-  text-align: center;
   justify-content: center;
+  gap: 10px;
+  text-align: center;
   align-items: center;
 }
 
 .h2 {
   text-align: center;
   color: black;
+}
+
+.filter {
+  padding-x: 5rem;
+  border: 5px solid;
+  border: red;
 }
 
 .labelTitle {
