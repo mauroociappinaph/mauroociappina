@@ -24,7 +24,7 @@
 }
 
 /* Colores diferentes para diferentes estados */
-.postulationCard[data-status="applied"] {
+.postulationCard[data-status="Pending Response"] {
   border-color: #3b82f6;
 }
 .postulationCard[data-status="interview"] {
