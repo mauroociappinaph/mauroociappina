@@ -3,7 +3,7 @@ import PostulationsPage from "./features/postulations/pages/PostulationsPage.tsx
 import RegisterPage from "./features/auth/pages/RegisterPage.tsx";
 import LoginPage from "./features/auth/pages/LoginPage.tsx";
 import HomePage from "./features/home/HomePage";
-import PostulationDetail from "./features/postulations/pages/PostulationDetail.tsx";
+import PostulationDetail from "./features/postulations/pages/PostulationDetailPage.tsx";
 
 const App = () => {
   return (
