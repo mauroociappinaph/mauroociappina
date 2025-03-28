@@ -14,14 +14,23 @@ export const Filters: React.FC = () => {
             <option className={styles.optionTitle} value="all">
               All
             </option>
-            <option className={styles.optionTitle} value="pending">
+            <option className={styles.optionTitle} value="Pending Response">
               Pendiente
             </option>
-            <option className={styles.optionTitle} value="approved">
-              Aprobado
+            <option className={styles.optionTitle} value="Accepteded">
+              Aceptado
             </option>
-            <option className={styles.optionTitle} value="rejected">
+            <option className={styles.optionTitle} value="Rejected">
               Rechazado
+            </option>
+            <option className={styles.optionTitle} value="First Interview">
+              Primera Entrevista
+            </option>
+            <option className={styles.optionTitle} value="Second Interview">
+              Segunda Entrevista
+            </option>
+            <option className={styles.optionTitle} value="Technical Interview">
+              Entrevista Técnica
             </option>
           </select>
         </div>
