@@ -32,9 +32,9 @@ const LoginPage = () => {
 
       setUserId(userData.id);
       updateUser(userData);
+      auth.updateUser(userData.data);
 
       navigate("/postulations");
-      auth.updateUser(userData.data);
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
         console.error("Error en el backend:", error.response?.data);
