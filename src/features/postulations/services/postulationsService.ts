@@ -3,13 +3,17 @@ import { CreatePostulationDTO, Postulation } from "../types/postulation.types";
 
 const api = import.meta.env.VITE_API_URL;
 
-export const fetchPostulations = async (userId: string): Promise<Postulation[]> => {
+export const fetchPostulations = async (
+  userId: string,
+): Promise<Postulation[]> => {
   const response = await axios.get(`${api}/postulations/${userId}`);
   return response.data.result.postulations;
 };
 
-export const createPostulation = async (postulationData: CreatePostulationDTO): Promise<Postulation> => {
-  const response = await axios.post(`${api}/postulations`, postulationData);
+export const createPostulation = async (
+  postulationData: CreatePostulationDTO,
+): Promise<Postulation> => {
+  const response = await axios.post(`${api}/postulation`, postulationData);
   return response.data.result;
 };
 
