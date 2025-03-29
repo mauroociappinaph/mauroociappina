@@ -1,52 +1,51 @@
 import React, { useState } from "react";
 import { loginService } from "../services/authService";
 import styles from "../styles/Login.module.css";
-import { NavigationButton } from "../../../components/common/Button/NavigationButton.js";
-import { useAuthRedirect } from "../../../hooks/useAuth.js";
-import { useUserStore } from "../../../stores/userStore.js";
-import { useAuth } from "../../../hooks/useAuth.js";
+import { NavigationButton } from "../../../components/common/Button/NavigationButton";
+import { useAuth } from "../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
+import { ROUTES } from "../../../config/routes";
+import { LoginCredentials, AuthError } from "../types/auth.types";
 
 const LoginPage = () => {
-  useAuthRedirect();
-  const auth = useAuth();
-
   const navigate = useNavigate();
-
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState<{ error?: string; message: string }>({
-    message: "",
-  });
-
-  const setUserId = useUserStore((state) => state.setUserId);
   const { updateUser } = useAuth();
+  const [credentials, setCredentials] = useState<LoginCredentials>({
+    email: "",
+    password: "",
+  });
+  const [error, setError] = useState<AuthError>({ message: "" });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setCredentials(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
 
   const handleLogin = async (event: React.FormEvent) => {
     event.preventDefault();
     setError({ message: "" });
 
     try {
-      const userData = await loginService(email, password);
+      const userData = await loginService(credentials.email, credentials.password);
+      
+      localStorage.setItem("id", userData.data.id);
+      updateUser(userData.data);
 
-      setUserId(userData.id);
-      updateUser(userData);
-      auth.updateUser(userData.data);
-
-      navigate("/postulations");
+      await new Promise(resolve => setTimeout(resolve, 100));
+      navigate(ROUTES.POSTULATIONS, { replace: true });
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
-        console.error("Error en el backend:", error.response?.data);
         setError({
           error: error.response?.data?.error || "Error desconocido",
           message: error.response?.data?.message || "Ocurrió un error",
         });
       } else if (error instanceof Error) {
-        console.error("Error en la petición:", error.message);
         setError({ message: "Error en la conexión con el servidor" });
       } else {
-        console.error("Error desconocido:", error);
         setError({ message: "Error inesperado" });
       }
     }
@@ -55,7 +54,7 @@ const LoginPage = () => {
   return (
     <div className={styles.container}>
       <div className={styles.backButton}>
-        <NavigationButton to="/" label="Atrás" />
+        <NavigationButton to={ROUTES.HOME} label="Atrás" />
       </div>
 
       <div className={styles.formContainer}>
@@ -63,19 +62,21 @@ const LoginPage = () => {
         <form onSubmit={handleLogin} className={styles.form}>
           <input
             type="email"
+            name="email"
             placeholder="Email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
+            value={credentials.email}
+            onChange={handleInputChange}
             required
           />
           <input
             type="password"
+            name="password"
             placeholder="Password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
+            value={credentials.password}
+            onChange={handleInputChange}
             required
           />
-          <button disabled={password.length < 6} type="submit">
+          <button disabled={credentials.password.length < 6} type="submit">
             Login
           </button>
           {error.message && <p className={styles.error}>{error.message}</p>}
