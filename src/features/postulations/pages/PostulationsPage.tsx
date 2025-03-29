@@ -1,28 +1,28 @@
-import React, { useEffect } from "react";
-import { usePostulationsStore } from "../stores/postulationsStore";
+import React, { useState, useEffect } from "react";
 import PostulationsList from "../components/PostulationsList";
 import styles from "../styles/PostulationsPage.module.css";
-import Button from "../../../components/common/Button/Button.module.css";
 import { Filters } from "../components/Filters";
 import { AddPostulationForm } from "../components/AddPostulationForm.js";
-import { useState } from "react";
-import { useUserStore } from "../../../stores/userStore.js";
+import { useAuthStore } from "../../auth/stores/authStore";
+import { useNavigate } from "react-router-dom";
+import { ROUTES } from "../../../config/routes";
+import { usePostulationsQuery } from "../hooks/usePostulationsQuery";
 
 const PostulationsPage: React.FC = () => {
-  const { postulations, loading, fetchPostulations } = usePostulationsStore();
   const [isClickedButton, setIsClickedButton] = useState(false);
-  const userId = useUserStore((state) => state.userId);
-
+  const navigate = useNavigate();
+  const { user } = useAuthStore();
+  
   useEffect(() => {
-    const userLocalId = localStorage.getItem("id");
-    const currentUserId = userLocalId || userId;
-    
-    if (currentUserId) {
-      fetchPostulations(currentUserId);
+    if (!user) {
+      navigate(ROUTES.LOGIN);
     }
-  }, [fetchPostulations, userId]);
+  }, [user, navigate]);
 
-  if (loading) return <div>Loading postulations...</div>;
+  const { postulations, isLoading } = usePostulationsQuery(user?.id);
+
+  if (!user) return null;
+  if (isLoading) return <div>Loading postulations...</div>;
 
   return (
     <main className={styles.PostulationsPage}>
@@ -38,14 +38,14 @@ const PostulationsPage: React.FC = () => {
 
       {/* Sección de Postulaciones */}
       <section className={styles.postulationsSection}>
-        {postulations.length === 0 ? (
+        {!postulations || postulations.length === 0 ? (
           <p>No postulations yet</p>
         ) : (
-          <PostulationsList />
+          <PostulationsList postulations={postulations} />
         )}
 
         <button
-          className={Button.addButton}
+          className={styles.addButton}
           onClick={() => setIsClickedButton(true)}
           aria-label="Add new postulation"
         >
