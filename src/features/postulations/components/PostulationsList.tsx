@@ -1,13 +1,13 @@
 import React from "react";
-import { usePostulationsStore } from "../stores/postulationsStore";
 import styles from "../styles/CardStyle.module.css";
-import { Postulation } from "../types";
+import { Postulation } from "../types/postulation.types";
 import { NavLink } from "react-router-dom";
 
-const PostulationsList: React.FC = () => {
-  const { postulations, loading } = usePostulationsStore();
+interface PostulationsListProps {
+  postulations: Postulation[];
+}
 
-  if (loading) return <p className={styles.loading}>Loading postulations...</p>;
+const PostulationsList: React.FC<PostulationsListProps> = ({ postulations }) => {
   if (!postulations || postulations.length === 0)
     return <p>No hay postulaciones disponibles.</p>;
 

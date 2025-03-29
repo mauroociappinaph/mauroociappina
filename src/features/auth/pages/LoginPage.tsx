@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { loginService } from "../services/authService";
 import styles from "../styles/Login.module.css";
 import { NavigationButton } from "../../../components/common/Button/NavigationButton";
-import { useAuth } from "../hooks/useAuth";
+import { useAuthStore } from "../stores/authStore";
 import { useNavigate } from "react-router-dom";
 import { AxiosError } from "axios";
 import { ROUTES } from "../../../config/routes";
@@ -10,7 +10,7 @@ import { LoginCredentials, AuthError } from "../types/auth.types";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { updateUser } = useAuth();
+  const { login } = useAuthStore();
   const [credentials, setCredentials] = useState<LoginCredentials>({
     email: "",
     password: "",
@@ -31,11 +31,7 @@ const LoginPage = () => {
 
     try {
       const userData = await loginService(credentials.email, credentials.password);
-      
-      localStorage.setItem("id", userData.data.id);
-      updateUser(userData.data);
-
-      await new Promise(resolve => setTimeout(resolve, 100));
+      login(userData.data);
       navigate(ROUTES.POSTULATIONS, { replace: true });
     } catch (error: unknown) {
       if (error instanceof AxiosError) {

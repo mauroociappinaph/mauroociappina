@@ -1,28 +1,16 @@
-import { Postulation } from "../types";
 import axios from "axios";
+import { CreatePostulationDTO, Postulation } from "../types/postulation.types";
 
 const api = import.meta.env.VITE_API_URL;
 
-export const fetchPostulations = async (
-  userId: string,
-): Promise<Postulation[]> => {
-  try {
-    const response = await axios.get(`${api}/postulations/${userId}`);
-    return response.data.result.postulations;
-  } catch (error) {
-    console.error("Error fetching postulations:", error);
-    throw error;
-  }
+export const fetchPostulations = async (userId: string): Promise<Postulation[]> => {
+  const response = await axios.get(`${api}/postulations/${userId}`);
+  return response.data.result.postulations;
 };
 
-export const createPostulation = async (postulationData: Postulation) => {
-  try {
-    const response = await axios.post(`${api}/postulation/`, postulationData);
-    return response.data.result;
-  } catch (error) {
-    console.error("Error creating postulation:", error);
-    throw error;
-  }
+export const createPostulation = async (postulationData: CreatePostulationDTO): Promise<Postulation> => {
+  const response = await axios.post(`${api}/postulations`, postulationData);
+  return response.data.result;
 };
 
 export const getPostulationDetail = async (postId: string) => {
