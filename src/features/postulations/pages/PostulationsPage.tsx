@@ -63,7 +63,7 @@ const PostulationsPage: React.FC = () => {
             >
               &times;
             </button>
-            <AddPostulationForm />
+            <AddPostulationForm onClose={() => setIsClickedButton(false)} />
           </div>
         </div>
       )}
