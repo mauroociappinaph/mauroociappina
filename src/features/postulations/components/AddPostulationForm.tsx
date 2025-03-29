@@ -1,8 +1,16 @@
 import React, { useState } from "react";
 import styles from "../styles/AddPostulationForm.module.css";
-import { createPostulation } from "../services/postulationsService.ts";
+import { usePostulationsQuery } from "../hooks/usePostulationsQuery";
+import { useAuthStore } from "../../auth/stores/authStore";
 
-export const AddPostulationForm: React.FC = () => {
+interface AddPostulationFormProps {
+  onClose: () => void;
+}
+
+export const AddPostulationForm: React.FC<AddPostulationFormProps> = ({ onClose }) => {
+  const { user } = useAuthStore();
+  const { createPostulation } = usePostulationsQuery(user?.id);
+  
   const [postulationData, setPostulationData] = useState({
     position: "",
     company: "",
@@ -13,7 +21,7 @@ export const AddPostulationForm: React.FC = () => {
     sendEmail: false,
     sendCv: false,
     description: "",
-    userId: localStorage.getItem("id"),
+    userId: user?.id || "",
   });
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,10 +55,8 @@ export const AddPostulationForm: React.FC = () => {
     console.log("Datos de la postulación:", postulationData);
 
     try {
-      const postulacion = await createPostulation(postulationData);
-
-      console.log(" postulacion respuesta ", postulacion);
-      // Limpiar el formulario después de enviar
+      await createPostulation(postulationData);
+      
       setPostulationData({
         position: "",
         company: "",
@@ -61,8 +67,11 @@ export const AddPostulationForm: React.FC = () => {
         sendEmail: false,
         sendCv: false,
         description: "",
-        userId: "",
+        userId: user?.id || "",
       });
+      
+      onClose();
+      
       console.log("Postulación creada exitosamente");
     } catch (error) {
       console.error("Error al crear la postulación:", error);
@@ -73,7 +82,7 @@ export const AddPostulationForm: React.FC = () => {
     <main className={styles.container}>
       <h3 className={styles.title}>Agregar nueva Postulación</h3>
       <form className={styles.form} onSubmit={handleSubmit}>
-        {/* Campo: Posición */}
+
         <label htmlFor="position" className={styles.label}>
           Posición
         </label>
@@ -87,7 +96,6 @@ export const AddPostulationForm: React.FC = () => {
           onChange={handleInputChange}
         />
 
-        {/* Campo: Empresa */}
         <label htmlFor="company" className={styles.label}>
           Empresa
         </label>
@@ -101,7 +109,6 @@ export const AddPostulationForm: React.FC = () => {
           onChange={handleInputChange}
         />
 
-        {/* Campo: Status */}
         <label htmlFor="status" className={styles.label}>
           Estado de respuesta
         </label>
@@ -115,7 +122,6 @@ export const AddPostulationForm: React.FC = () => {
           onChange={handleInputChange}
         />
 
-        {/* Campo: Fecha de Postulación */}
         <label htmlFor="applicationDate" className={styles.label}>
           Fecha de Postulación
         </label>
@@ -128,7 +134,6 @@ export const AddPostulationForm: React.FC = () => {
           onChange={handleInputChange}
         />
 
-        {/* Campo: Link */}
         <label htmlFor="link" className={styles.label}>
           Link
         </label>
@@ -142,7 +147,6 @@ export const AddPostulationForm: React.FC = () => {
           onChange={handleInputChange}
         />
 
-        {/* Campo: Contacto del Reclutador/a */}
         <label htmlFor="recruiterContact" className={styles.label}>
           Contacto del Reclutador/a
         </label>
@@ -156,7 +160,6 @@ export const AddPostulationForm: React.FC = () => {
           onChange={handleInputChange}
         />
 
-        {/* Checkbox: Envié Email al Reclutador/a */}
         <div className={styles.checkboxContainer}>
           <input
             type="checkbox"
@@ -171,7 +174,6 @@ export const AddPostulationForm: React.FC = () => {
           </label>
         </div>
 
-        {/* Checkbox: Envié CV */}
         <div className={styles.checkboxContainer}>
           <input
             type="checkbox"
@@ -186,7 +188,6 @@ export const AddPostulationForm: React.FC = () => {
           </label>
         </div>
 
-        {/* Campo: Descripción/Comentarios */}
         <label htmlFor="description" className={styles.label}>
           Descripción/Comentarios
         </label>
@@ -199,7 +200,6 @@ export const AddPostulationForm: React.FC = () => {
           onChange={handleTextareaChange}
         />
 
-        {/* Botón de Enviar */}
         <button type="submit" className={styles.submitButton}>
           Guardar Postulación
         </button>
