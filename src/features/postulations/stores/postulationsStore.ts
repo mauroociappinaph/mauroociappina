@@ -25,6 +25,7 @@ export const usePostulationsStore = create<PostulationsState>((set) => ({
     set({ loading: true });
     try {
       const data = await fetchPostulations(userId);
+      console.log("data", data);
       set({ postulations: data });
     } catch (error) {
       console.error("Error fetching postulations:", error);
@@ -33,4 +34,3 @@ export const usePostulationsStore = create<PostulationsState>((set) => ({
     }
   },
 }));
-

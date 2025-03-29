@@ -4,7 +4,7 @@ import styles from "../styles/Filters.module.css";
 export const Filters: React.FC = () => {
   return (
     <div className={styles.content}>
-      <h2 className={styles.h2}>Filters</h2>;
+      <h2 className={styles.h2}>Filtros</h2>
       <div className={styles.filters}>
         <div className="filter">
           <label className={styles.labelTitle} htmlFor="status-filter">
