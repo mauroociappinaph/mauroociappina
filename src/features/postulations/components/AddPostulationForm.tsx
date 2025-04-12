@@ -7,10 +7,12 @@ interface AddPostulationFormProps {
   onClose: () => void;
 }
 
-export const AddPostulationForm: React.FC<AddPostulationFormProps> = ({ onClose }) => {
+export const AddPostulationForm: React.FC<AddPostulationFormProps> = ({
+  onClose,
+}) => {
   const { user } = useAuthStore();
   const { createPostulation } = usePostulationsQuery(user?.id);
-  
+
   const [postulationData, setPostulationData] = useState({
     position: "",
     company: "",
@@ -52,11 +54,10 @@ export const AddPostulationForm: React.FC<AddPostulationFormProps> = ({ onClose 
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log("Datos de la postulación:", postulationData);
 
     try {
       await createPostulation(postulationData);
-      
+
       setPostulationData({
         position: "",
         company: "",
@@ -69,10 +70,8 @@ export const AddPostulationForm: React.FC<AddPostulationFormProps> = ({ onClose 
         description: "",
         userId: user?.id || "",
       });
-      
+
       onClose();
-      
-      console.log("Postulación creada exitosamente");
     } catch (error) {
       console.error("Error al crear la postulación:", error);
     }
@@ -82,7 +81,6 @@ export const AddPostulationForm: React.FC<AddPostulationFormProps> = ({ onClose 
     <main className={styles.container}>
       <h3 className={styles.title}>Agregar nueva Postulación</h3>
       <form className={styles.form} onSubmit={handleSubmit}>
-
         <label htmlFor="position" className={styles.label}>
           Posición
         </label>

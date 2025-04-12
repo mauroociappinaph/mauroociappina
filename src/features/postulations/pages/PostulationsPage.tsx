@@ -12,17 +12,30 @@ const PostulationsPage: React.FC = () => {
   const [isClickedButton, setIsClickedButton] = useState(false);
   const navigate = useNavigate();
   const { user } = useAuthStore();
-  
+
   useEffect(() => {
     if (!user) {
       navigate(ROUTES.LOGIN);
     }
   }, [user, navigate]);
 
-  const { postulations, isLoading } = usePostulationsQuery(user?.id);
+  const { postulations, isLoading, isError, error } = usePostulationsQuery(
+    user?.id,
+  );
+
+  useEffect(() => {
+    console.log("Postulations state:", {
+      postulations,
+      isLoading,
+      isError,
+      error,
+    });
+  }, [postulations, isLoading, isError, error]);
 
   if (!user) return null;
-  if (isLoading) return <div>Loading postulations...</div>;
+  if (isLoading) return <div>Cargando postulaciones...</div>;
+  if (isError)
+    return <div>Error al cargar postulaciones: {error?.message}</div>;
 
   return (
     <main className={styles.PostulationsPage}>
