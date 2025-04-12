@@ -4,7 +4,7 @@ const api = import.meta.env.VITE_API_URL;
 
 export const createUserService = async (userData: object) => {
   try {
-    const { data } = await axios.post(`${api}/user`, userData);
+    const { data } = await axios.post(`${api}/users`, userData);
     if (data) {
       return "Ok";
     } else {
