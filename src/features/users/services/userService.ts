@@ -2,8 +2,6 @@ import axios from "axios";
 
 const api = import.meta.env.VITE_API_URL;
 
-console.log(" ------------ API --------", api);
-
 export const updateUserService = async (id: string, userData: object) => {
   try {
     const { data } = await axios.patch(`${api}/user/${id}`, userData);
