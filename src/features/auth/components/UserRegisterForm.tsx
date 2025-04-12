@@ -133,7 +133,9 @@ const RegisterForm = () => {
         Registrarme
       </button>
 
-      {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
+      {successMessage && (
+        <p style={{ color: "lightgreen" }}>{successMessage}</p>
+      )}
       {error && <p style={{ color: "red" }}>{error}</p>}
     </form>
   );

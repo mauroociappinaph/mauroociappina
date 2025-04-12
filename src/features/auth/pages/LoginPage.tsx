@@ -35,7 +35,6 @@ const LoginPage = () => {
         credentials.password,
       );
 
-      console.log("userData", userData);
       login(userData);
       navigate(ROUTES.POSTULATIONS, { replace: true });
     } catch (error: unknown) {

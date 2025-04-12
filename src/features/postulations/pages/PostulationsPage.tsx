@@ -23,14 +23,7 @@ const PostulationsPage: React.FC = () => {
     user?.id,
   );
 
-  useEffect(() => {
-    console.log("Postulations state:", {
-      postulations,
-      isLoading,
-      isError,
-      error,
-    });
-  }, [postulations, isLoading, isError, error]);
+  useEffect(() => {}, [postulations, isLoading, isError, error]);
 
   if (!user) return null;
   if (isLoading) return <div>Cargando postulaciones...</div>;
