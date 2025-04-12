@@ -1,5 +1,5 @@
-import { useUserStore } from '../../../stores/userStore';
-import { User } from '../types/auth.types';
+import { useUserStore } from "../../../stores/userStore";
+import { User } from "../types/auth.types";
 
 export const useAuth = () => {
   const setUserId = useUserStore((state) => state.setUserId);
@@ -34,6 +34,7 @@ export const useAuth = () => {
     updateUser,
     isAuthenticated,
     logout,
-    userId
+    userId,
   };
-}; 
+};
+
