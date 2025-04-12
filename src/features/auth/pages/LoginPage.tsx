@@ -17,11 +17,11 @@ const LoginPage = () => {
   });
   const [error, setError] = useState<AuthError>({ message: "" });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setCredentials(prev => ({
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setCredentials((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -30,8 +30,13 @@ const LoginPage = () => {
     setError({ message: "" });
 
     try {
-      const userData = await loginService(credentials.email, credentials.password);
-      login(userData.data);
+      const userData = await loginService(
+        credentials.email,
+        credentials.password,
+      );
+
+      console.log("userData", userData);
+      login(userData);
       navigate(ROUTES.POSTULATIONS, { replace: true });
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
