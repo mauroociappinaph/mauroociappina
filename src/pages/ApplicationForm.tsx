@@ -1,25 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useApplications } from '../context/ApplicationContext';
-import { ApplicationStatus, STATUS_LABELS } from '../types/application';
+import { useApplicationStore } from '../store';
+import { ApplicationStatus  , STATUS_LABELS} from '../types/index';
 import Modal from '../components/Modal';
 import { Save, AlertCircle } from 'lucide-react';
 
 const ApplicationForm: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { addApplication, updateApplication, getApplication, checkDuplicate } = useApplications();
-  
+  const { addApplication, updateApplication, getApplication, checkDuplicate } = useApplicationStore();
+
   const [company, setCompany] = useState('');
   const [position, setPosition] = useState('');
   const [status, setStatus] = useState<ApplicationStatus>('applied');
   const [date, setDate] = useState('');
   const [url, setUrl] = useState('');
   const [notes, setNotes] = useState('');
-  
+
   const [showDuplicateModal, setShowDuplicateModal] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  
+
   // Set today's date as default
   useEffect(() => {
     const today = new Date().toISOString().split('T')[0];
@@ -27,7 +27,7 @@ const ApplicationForm: React.FC = () => {
       setDate(today);
     }
   }, [date]);
-  
+
   // Load existing application if editing
   useEffect(() => {
     if (id) {
@@ -44,30 +44,30 @@ const ApplicationForm: React.FC = () => {
       }
     }
   }, [id, getApplication, navigate]);
-  
+
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
-    
+
     if (!company.trim()) {
       newErrors.company = 'La empresa es requerida';
     }
-    
+
     if (!position.trim()) {
       newErrors.position = 'El puesto es requerido';
     }
-    
+
     if (!date) {
       newErrors.date = 'La fecha es requerida';
     }
-    
+
     if (url && !isValidUrl(url)) {
       newErrors.url = 'La URL debe ser válida';
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-  
+
   const isValidUrl = (url: string) => {
     try {
       new URL(url);
@@ -76,20 +76,20 @@ const ApplicationForm: React.FC = () => {
       return false;
     }
   };
-  
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
-    
+
     // Check for duplicates only when creating new application
     if (!id && checkDuplicate(company, position)) {
       setShowDuplicateModal(true);
       return;
     }
-    
+
     if (id) {
       updateApplication(id, {
         company,
@@ -109,13 +109,13 @@ const ApplicationForm: React.FC = () => {
         notes
       });
     }
-    
+
     navigate('/');
   };
-  
+
   const handleContinueAnyway = () => {
     setShowDuplicateModal(false);
-    
+
     addApplication({
       company,
       position,
@@ -124,21 +124,21 @@ const ApplicationForm: React.FC = () => {
       url,
       notes
     });
-    
+
     navigate('/');
   };
-  
+
   return (
     <div className="max-w-3xl mx-auto">
       <h1 className="text-2xl font-bold text-gray-900 mb-6">
         {id ? 'Editar Postulación' : 'Nueva Postulación'}
       </h1>
-      
+
       <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg p-6">
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
           <div>
-            <label 
-              htmlFor="company" 
+            <label
+              htmlFor="company"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
               Empresa *
@@ -157,10 +157,10 @@ const ApplicationForm: React.FC = () => {
               <p className="mt-1 text-sm text-red-600">{errors.company}</p>
             )}
           </div>
-          
+
           <div>
-            <label 
-              htmlFor="position" 
+            <label
+              htmlFor="position"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
               Puesto *
@@ -179,10 +179,10 @@ const ApplicationForm: React.FC = () => {
               <p className="mt-1 text-sm text-red-600">{errors.position}</p>
             )}
           </div>
-          
+
           <div>
-            <label 
-              htmlFor="status" 
+            <label
+              htmlFor="status"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
               Estado *
@@ -200,10 +200,10 @@ const ApplicationForm: React.FC = () => {
               ))}
             </select>
           </div>
-          
+
           <div>
-            <label 
-              htmlFor="date" 
+            <label
+              htmlFor="date"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
               Fecha de Postulación *
@@ -221,10 +221,10 @@ const ApplicationForm: React.FC = () => {
               <p className="mt-1 text-sm text-red-600">{errors.date}</p>
             )}
           </div>
-          
+
           <div className="md:col-span-2">
-            <label 
-              htmlFor="url" 
+            <label
+              htmlFor="url"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
               URL de Referencia
@@ -243,10 +243,10 @@ const ApplicationForm: React.FC = () => {
               <p className="mt-1 text-sm text-red-600">{errors.url}</p>
             )}
           </div>
-          
+
           <div className="md:col-span-2">
-            <label 
-              htmlFor="notes" 
+            <label
+              htmlFor="notes"
               className="block text-sm font-medium text-gray-700 mb-1"
             >
               Notas
@@ -261,7 +261,7 @@ const ApplicationForm: React.FC = () => {
             />
           </div>
         </div>
-        
+
         <div className="mt-6 flex justify-end">
           <button
             type="button"
@@ -279,7 +279,7 @@ const ApplicationForm: React.FC = () => {
           </button>
         </div>
       </form>
-      
+
       <Modal
         isOpen={showDuplicateModal}
         onClose={() => setShowDuplicateModal(false)}
@@ -291,7 +291,7 @@ const ApplicationForm: React.FC = () => {
           </div>
           <div className="ml-3">
             <p className="text-sm text-gray-700">
-              Ya existe una postulación para <strong>{position}</strong> en <strong>{company}</strong>. 
+              Ya existe una postulación para <strong>{position}</strong> en <strong>{company}</strong>.
               ¿Deseas continuar de todos modos?
             </p>
             <div className="mt-4 flex justify-end space-x-3">

@@ -1,13 +1,13 @@
 import React, { useState, useMemo } from 'react';
-import { useApplications } from '../context/ApplicationContext';
+import { useApplicationStore } from '../store';
 import ApplicationCard from '../components/ApplicationCard';
 import SearchAndFilter from '../components/SearchAndFilter';
 import ApplicationStats from '../components/ApplicationStats';
-import { ApplicationStatus } from '../types/application';
+import { ApplicationStatus } from '../types/index';
 import { AlertCircle } from 'lucide-react';
 
 const Dashboard: React.FC = () => {
-  const { applications } = useApplications();
+  const { applications } = useApplicationStore();
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<ApplicationStatus | 'all'>('all');
   const [companyFilter, setCompanyFilter] = useState('');
@@ -28,20 +28,20 @@ const Dashboard: React.FC = () => {
   const filteredApplications = useMemo(() => {
     return applications.filter(app => {
       // Text search
-      const searchMatch = searchTerm === '' || 
+      const searchMatch = searchTerm === '' ||
         app.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
         app.position.toLowerCase().includes(searchTerm.toLowerCase()) ||
         (app.notes && app.notes.toLowerCase().includes(searchTerm.toLowerCase()));
-      
+
       // Status filter
       const statusMatch = statusFilter === 'all' || app.status === statusFilter;
-      
+
       // Company filter
       const companyMatch = companyFilter === '' || app.company === companyFilter;
-      
+
       // Position filter
       const positionMatch = positionFilter === '' || app.position === positionFilter;
-      
+
       return searchMatch && statusMatch && companyMatch && positionMatch;
     });
   }, [applications, searchTerm, statusFilter, companyFilter, positionFilter]);
@@ -49,9 +49,9 @@ const Dashboard: React.FC = () => {
   return (
     <div>
       <h1 className="text-2xl font-bold text-gray-900 mb-6">Dashboard</h1>
-      
+
       <ApplicationStats />
-      
+
       <SearchAndFilter
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
@@ -64,7 +64,7 @@ const Dashboard: React.FC = () => {
         companies={companies}
         positions={positions}
       />
-      
+
       {applications.length === 0 ? (
         <div className="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-md">
           <div className="flex">

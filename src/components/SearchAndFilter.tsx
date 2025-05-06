@@ -1,6 +1,6 @@
 import React from 'react';
 import { Search, Filter } from 'lucide-react';
-import { ApplicationStatus, STATUS_LABELS } from '../types/application';
+import { ApplicationStatus, STATUS_LABELS } from '../types/interface/application/application';
 
 interface SearchAndFilterProps {
   searchTerm: string;
@@ -44,7 +44,7 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
             />
           </div>
         </div>
-        
+
         <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
           <div>
             <select
@@ -60,7 +60,7 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
               ))}
             </select>
           </div>
-          
+
           <div>
             <select
               value={companyFilter}
@@ -75,7 +75,7 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
               ))}
             </select>
           </div>
-          
+
           <div>
             <select
               value={positionFilter}

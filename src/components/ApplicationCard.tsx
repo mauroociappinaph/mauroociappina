@@ -1,16 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Edit, Trash2, ExternalLink } from 'lucide-react';
-import { Application } from '../types/application';
+import { Application } from '../types/index';
 import StatusBadge from './StatusBadge';
-import { useApplications } from '../context/ApplicationContext';
+import { useApplicationStore } from '../store';
 
 interface ApplicationCardProps {
   application: Application;
 }
 
 const ApplicationCard: React.FC<ApplicationCardProps> = ({ application }) => {
-  const { deleteApplication } = useApplications();
+  const { deleteApplication } = useApplicationStore();
   const { id, company, position, status, date, url } = application;
 
   const formattedDate = new Date(date).toLocaleDateString('es-ES', {
@@ -35,11 +35,11 @@ const ApplicationCard: React.FC<ApplicationCardProps> = ({ application }) => {
           </div>
           <StatusBadge status={status} />
         </div>
-        
+
         <div className="mt-4 flex items-center text-sm text-gray-500">
           <span>Aplicado: {formattedDate}</span>
         </div>
-        
+
         <div className="mt-4 flex justify-between items-center">
           <div className="flex space-x-2">
             <Link
@@ -57,7 +57,7 @@ const ApplicationCard: React.FC<ApplicationCardProps> = ({ application }) => {
               Eliminar
             </button>
           </div>
-          
+
           {url && (
             <a
               href={url}

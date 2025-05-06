@@ -1,9 +1,9 @@
-export type ApplicationStatus = 
-  | 'applied' 
-  | 'interview' 
-  | 'technical' 
-  | 'offer' 
-  | 'rejected' 
+export type ApplicationStatus =
+  | 'applied'
+  | 'interview'
+  | 'technical'
+  | 'offer'
+  | 'rejected'
   | 'accepted';
 
 export interface Application {
@@ -35,3 +35,13 @@ export const STATUS_COLORS: Record<ApplicationStatus, string> = {
   rejected: 'bg-red-100 text-red-800',
   accepted: 'bg-green-100 text-green-800'
 };
+
+
+export interface ApplicationState {
+  applications: Application[];
+  addApplication: (application: Omit<Application, 'id' | 'createdAt' | 'updatedAt'>) => string;
+  updateApplication: (id: string, application: Partial<Application>) => void;
+  deleteApplication: (id: string) => void;
+  getApplication: (id: string) => Application | undefined;
+  checkDuplicate: (company: string, position: string) => boolean;
+}

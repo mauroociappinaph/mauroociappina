@@ -1,10 +1,10 @@
 import React from 'react';
-import { useApplications } from '../context/ApplicationContext';
-import { ApplicationStatus, STATUS_LABELS } from '../types/application';
+import { useApplicationStore } from '../store';
+import { ApplicationStatus, STATUS_LABELS } from '../types/interface/application/application';
 import { PieChart, Activity, Users, Calendar } from 'lucide-react';
 
 const ApplicationStats: React.FC = () => {
-  const { applications } = useApplications();
+  const { applications } = useApplicationStore();
 
   // Count by status
   const statusCounts = applications.reduce((acc, app) => {
@@ -36,7 +36,7 @@ const ApplicationStats: React.FC = () => {
   // Applications in the last 30 days
   const last30Days = new Date();
   last30Days.setDate(last30Days.getDate() - 30);
-  
+
   const recentApplications = applications.filter(
     app => new Date(app.date) >= last30Days
   ).length;
@@ -82,18 +82,18 @@ const ApplicationStats: React.FC = () => {
           </div>
         ))}
       </div>
-      
+
       <div className="mt-6 bg-white shadow rounded-lg p-6">
         <h3 className="text-lg font-medium text-gray-900 mb-4">Distribución por Estado</h3>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {Object.entries(STATUS_LABELS).map(([status, label]) => (
             <div key={status} className="text-center">
-              <div 
-                className={`inline-block w-16 h-3 rounded-full ${status === 'applied' ? 'bg-blue-500' : 
-                  status === 'interview' ? 'bg-purple-500' : 
-                  status === 'technical' ? 'bg-orange-500' : 
-                  status === 'offer' ? 'bg-teal-500' : 
-                  status === 'rejected' ? 'bg-red-500' : 
+              <div
+                className={`inline-block w-16 h-3 rounded-full ${status === 'applied' ? 'bg-blue-500' :
+                  status === 'interview' ? 'bg-purple-500' :
+                  status === 'technical' ? 'bg-orange-500' :
+                  status === 'offer' ? 'bg-teal-500' :
+                  status === 'rejected' ? 'bg-red-500' :
                   'bg-green-500'}`}
               />
               <p className="mt-2 text-sm font-medium text-gray-600">{label}</p>

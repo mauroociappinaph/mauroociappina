@@ -1,6 +1,5 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import { Briefcase } from 'lucide-react';
 import Navbar from './Navbar';
 
 const Layout: React.FC = () => {
