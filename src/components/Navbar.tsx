@@ -24,7 +24,7 @@ const Navbar: React.FC = () => {
           <div className="flex items-center">
             <Link to={user ? '/' : '/landing'} className="flex items-center">
               <Briefcase className="h-8 w-8 text-blue-600" />
-              <span className="ml-2 text-xl font-semibold text-gray-900">Gestor de Postulaciones</span>
+              <span className="ml-2 text-xl font-semibold text-gray-900">Postulate: gestor de Postulaciones</span>
             </Link>
           </div>
           

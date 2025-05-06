@@ -11,7 +11,7 @@ const Header: React.FC = () => {
           <div className="flex justify-between items-center">
             <div className="flex items-center">
               <Briefcase className="h-7 w-7 text-white mr-2" />
-              <span className="text-xl font-bold text-white">JobTracker</span>
+              <span className="text-xl font-bold text-white">Postulate</span>
             </div>
             <nav className="flex space-x-2">
               <Link
