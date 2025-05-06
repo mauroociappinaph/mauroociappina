@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Dashboard from './pages/Dashboard';
 import ApplicationForm from './pages/ApplicationForm';
@@ -12,7 +12,7 @@ const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => 
   const { user, loading } = useAuthStore();
 
   if (loading) {
-    return <div>Cargando...</div>;
+    return <div className="p-4">Cargando...</div>;
   }
 
   if (!user) {
@@ -24,6 +24,11 @@ const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 
 function App() {
   const { user } = useAuthStore();
+
+  // Log the authentication state for debugging
+  useEffect(() => {
+    console.log('Auth state:', { user });
+  }, [user]);
 
   return (
     <Router>
@@ -40,6 +45,7 @@ function App() {
           <Route path="add" element={<ApplicationForm />} />
           <Route path="edit/:id" element={<ApplicationForm />} />
         </Route>
+        <Route path="*" element={<Navigate to={user ? "/" : "/landing"} replace />} />
       </Routes>
     </Router>
   );
