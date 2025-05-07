@@ -18,7 +18,8 @@ const Register: React.FC = () => {
     try {
       await signUp(email, password, name);
       navigate('/');
-    } catch (err) {
+    } catch (error) {
+      console.log(error);
       setError('Error al crear la cuenta. Por favor, intenta nuevamente.');
     }
   };
