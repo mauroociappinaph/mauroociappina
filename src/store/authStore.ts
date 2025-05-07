@@ -34,7 +34,7 @@ export const useAuthStore = create<AuthState>()(
           throw new Error('Credenciales inválidas');
         }
 
-        const { password: _, ...userWithoutPassword } = user;
+        const { password: , ...userWithoutPassword } = user;
         set({ user: userWithoutPassword, loading: false });
       },
       signUp: async (email: string, password: string, name: string) => {

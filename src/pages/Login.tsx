@@ -17,8 +17,9 @@ const Login: React.FC = () => {
     try {
       await signIn(email, password);
       navigate('/');
-    } catch (err) {
+    } catch (error) {
       setError('Error al iniciar sesión. Por favor, verifica tus credenciales.');
+      console.log(error);
     }
   };
 
