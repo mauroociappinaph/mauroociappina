@@ -58,62 +58,71 @@ const Dashboard: React.FC = () => {
   }, [applications, searchTerm, statusFilter, companyFilter, positionFilter]);
 
   if (isLoading) {
-    return <div className="p-4">Cargando dashboard...</div>;
+    return <div className="p-8 text-lg font-medium">Cargando dashboard...</div>;
   }
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Dashboard</h1>
+    <div className="container mx-auto px-4 sm:px-8 py-8 font-sans">
+      <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-10">Dashboard</h1>
 
       {/* Cards de postulaciones arriba del resumen */}
-      {applications.length === 0 ? (
-        <div className="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-md mt-4">
-          <div className="flex">
-            <div className="flex-shrink-0">
-              <AlertCircle className="h-5 w-5 text-blue-400" />
-            </div>
-            <div className="ml-3">
-              <p className="text-sm text-blue-700">
-                No tienes postulaciones registradas. ¡Comienza agregando tu primera postulación!
-              </p>
-            </div>
-          </div>
-        </div>
-      ) : filteredApplications.length === 0 ? (
-        <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-md mt-4">
-          <div className="flex">
-            <div className="flex-shrink-0">
-              <AlertCircle className="h-5 w-5 text-yellow-400" />
-            </div>
-            <div className="ml-3">
-              <p className="text-sm text-yellow-700">
-                No se encontraron resultados con los filtros actuales.
-              </p>
+      <section className="mb-12">
+        {applications.length === 0 ? (
+          <div className="bg-blue-50 border-l-4 border-blue-400 p-6 rounded-2xl mt-4">
+            <div className="flex">
+              <div className="flex-shrink-0">
+                <AlertCircle className="h-6 w-6 text-blue-400" />
+              </div>
+              <div className="ml-4">
+                <p className="text-base text-blue-700">
+                  No tienes postulaciones registradas. ¡Comienza agregando tu primera postulación!
+                </p>
+              </div>
             </div>
           </div>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4 mb-8">
-          {filteredApplications.map(application => (
-            <ApplicationCard key={application.id} application={application} />
-          ))}
-        </div>
-      )}
+        ) : filteredApplications.length === 0 ? (
+          <div className="bg-yellow-50 border-l-4 border-yellow-400 p-6 rounded-2xl mt-4">
+            <div className="flex">
+              <div className="flex-shrink-0">
+                <AlertCircle className="h-6 w-6 text-yellow-400" />
+              </div>
+              <div className="ml-4">
+                <p className="text-base text-yellow-700">
+                  No se encontraron resultados con los filtros actuales.
+                </p>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+            {filteredApplications.map(application => (
+              <ApplicationCard key={application.id} application={application} />
+            ))}
+          </div>
+        )}
+      </section>
 
-      {/* Resumen y filtros */}
-      <ApplicationStats />
-      <SearchAndFilter
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-        statusFilter={statusFilter}
-        setStatusFilter={setStatusFilter}
-        companyFilter={companyFilter}
-        setCompanyFilter={setCompanyFilter}
-        positionFilter={positionFilter}
-        setPositionFilter={setPositionFilter}
-        companies={companies}
-        positions={positions}
-      />
+      {/* Resumen */}
+      <section className="mb-12">
+        <h2 className="text-2xl font-semibold text-gray-900 mb-6">Resumen</h2>
+        <ApplicationStats />
+      </section>
+
+      {/* Filtros y búsqueda */}
+      <section className="mb-10">
+        <SearchAndFilter
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          statusFilter={statusFilter}
+          setStatusFilter={setStatusFilter}
+          companyFilter={companyFilter}
+          setCompanyFilter={setCompanyFilter}
+          positionFilter={positionFilter}
+          setPositionFilter={setPositionFilter}
+          companies={companies}
+          positions={positions}
+        />
+      </section>
     </div>
   );
 };
