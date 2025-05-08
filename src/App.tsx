@@ -31,23 +31,23 @@ function App() {
   }, [user]);
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/landing" element={user ? <Navigate to="/" replace /> : <Landing />} />
-        <Route path="/login" element={user ? <Navigate to="/" replace /> : <Login />} />
-        <Route path="/register" element={user ? <Navigate to="/" replace /> : <Register />} />
-        <Route path="/" element={
-          <PrivateRoute>
-            <Layout />
-          </PrivateRoute>
-        }>
-          <Route index element={<Dashboard />} />
-          <Route path="add" element={<ApplicationForm />} />
-          <Route path="edit/:id" element={<ApplicationForm />} />
-        </Route>
+      <Router>
+        <Routes>
+          <Route path="/landing" element={user ? <Navigate to="/" replace /> : <Landing />} />
+          <Route path="/login" element={user ? <Navigate to="/" replace /> : <Login />} />
+          <Route path="/register" element={user ? <Navigate to="/" replace /> : <Register />} />
+          <Route path="/" element={
+            <PrivateRoute>
+              <Layout />
+            </PrivateRoute>
+          }>
+            <Route index element={<Dashboard />} />
+            <Route path="add" element={<ApplicationForm />} />
+            <Route path="edit/:id" element={<ApplicationForm />} />
+          </Route>
         <Route path="*" element={<Navigate to={user ? "/" : "/landing"} replace />} />
-      </Routes>
-    </Router>
+        </Routes>
+      </Router>
   );
 }
 

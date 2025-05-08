@@ -1,12 +1,6 @@
 import React from 'react';
+import { SimpleSelectProps } from '../../types/index';
 
-interface SimpleSelectProps {
-  label: string;
-  value: string;
-  onChange: (value: string) => void;
-  options: { value: string; label: string }[];
-  placeholder?: string;
-}
 
 const SimpleSelect: React.FC<SimpleSelectProps> = ({
   label,

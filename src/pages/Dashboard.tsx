@@ -65,21 +65,7 @@ const Dashboard: React.FC = () => {
     <div>
       <h1 className="text-2xl font-bold text-gray-900 mb-6">Dashboard</h1>
 
-      <ApplicationStats />
-
-      <SearchAndFilter
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
-        statusFilter={statusFilter}
-        setStatusFilter={setStatusFilter}
-        companyFilter={companyFilter}
-        setCompanyFilter={setCompanyFilter}
-        positionFilter={positionFilter}
-        setPositionFilter={setPositionFilter}
-        companies={companies}
-        positions={positions}
-      />
-
+      {/* Cards de postulaciones arriba del resumen */}
       {applications.length === 0 ? (
         <div className="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-md mt-4">
           <div className="flex">
@@ -107,12 +93,27 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4 mb-8">
           {filteredApplications.map(application => (
             <ApplicationCard key={application.id} application={application} />
           ))}
         </div>
       )}
+
+      {/* Resumen y filtros */}
+      <ApplicationStats />
+      <SearchAndFilter
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        statusFilter={statusFilter}
+        setStatusFilter={setStatusFilter}
+        companyFilter={companyFilter}
+        setCompanyFilter={setCompanyFilter}
+        positionFilter={positionFilter}
+        setPositionFilter={setPositionFilter}
+        companies={companies}
+        positions={positions}
+      />
     </div>
   );
 };

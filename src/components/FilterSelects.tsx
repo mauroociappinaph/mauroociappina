@@ -1,5 +1,5 @@
 import React from 'react';
-import { ApplicationStatus, STATUS_LABELS } from '../types/index';
+import { ApplicationStatus } from '../types/index';
 import {
   Select,
   SelectContent,
