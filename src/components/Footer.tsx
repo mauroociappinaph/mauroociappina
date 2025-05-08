@@ -10,7 +10,7 @@ const Footer: React.FC = () => {
         <div className="flex flex-col md:flex-row justify-between items-center">
           <div>
             <p className="text-sm text-gray-600">
-              © {currentYear} JobTracker - Gestor de Postulaciones Laborales
+              © {currentYear} Postulate - Gestor de Postulaciones Laborales
             </p>
           </div>
 
