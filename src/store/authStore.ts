@@ -62,7 +62,11 @@ export const useAuthStore = create<AuthState>()(
       },
       signOut: () => {
         set({ user: null });
-      }
+      },
+      updateUser: (data: { name?: string; email?: string }) =>
+        set((state) => ({
+          user: state.user ? { ...state.user, ...data } : null
+        })),
     }),
     {
       name: 'auth-storage'

@@ -1,13 +1,14 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Briefcase, ArrowRight } from 'lucide-react';
+import { APP_COLORS } from '../styles/colors';
 
 const Header: React.FC = () => {
   return (
     <header>
       {/* Barra de navegación */}
-      <div className="bg-blue-900 shadow-md">
-        <div className="container mx-auto px-4 py-4">
+      <div style={{ background: APP_COLORS.blue }} className="shadow-md">
+        <div className="container mx-auto px-6 py-4">
           <div className="flex justify-between items-center">
             <div className="flex items-center">
               <Briefcase className="h-7 w-7 text-white mr-2" />
@@ -35,7 +36,7 @@ const Header: React.FC = () => {
       <div
         className="relative bg-cover bg-center pt-16 pb-24 px-4"
         style={{
-          backgroundImage: "url('https://images.unsplash.com/photo-1553451166-232112bda6f6?q=80&w=2944&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')"
+          background: APP_COLORS.blueGradient
         }}
       >
         {/* Overlay para mejorar la legibilidad del texto */}
@@ -43,19 +44,19 @@ const Header: React.FC = () => {
 
         <div className="container mx-auto text-center relative z-10">
           <div className="flex justify-center mb-6">
-            <Briefcase className="h-16 w-16 text-blue-300" />
+            <Briefcase className="h-16 w-16 text-white" />
           </div>
           <h1 className="text-4xl font-bold text-white sm:text-5xl md:text-6xl mb-4">
             Gestor de Postulaciones Laborales
           </h1>
-          <p className="text-xl text-blue-100 max-w-2xl mx-auto mb-8">
+          <p className="text-xl text-white/90 max-w-2xl mx-auto mb-8">
             Organiza y haz seguimiento de tus postulaciones laborales de manera eficiente.
             Mantén el control de tu búsqueda de trabajo en un solo lugar.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link
               to="/login"
-              className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+              className="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-blue-900 bg-white hover:bg-blue-50 transition-colors"
             >
               Iniciar Sesión
               <ArrowRight className="ml-2 h-5 w-5" />

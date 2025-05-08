@@ -6,6 +6,7 @@ import Layout from './components/Layout';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import EditProfile from './pages/EditProfile';
 import { useAuthStore } from './store';
 
 const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -44,6 +45,7 @@ function App() {
             <Route index element={<Dashboard />} />
             <Route path="add" element={<ApplicationForm />} />
             <Route path="edit/:id" element={<ApplicationForm />} />
+            <Route path="profile" element={<EditProfile />} />
           </Route>
         <Route path="*" element={<Navigate to={user ? "/" : "/landing"} replace />} />
         </Routes>

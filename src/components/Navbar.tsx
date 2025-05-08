@@ -1,89 +1,104 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Briefcase, PlusCircle, LayoutDashboard, LogOut, User } from 'lucide-react';
+import { Briefcase } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
+import { APP_COLORS } from '../styles/colors';
 
 const Navbar: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, signOut } = useAuthStore();
-  
+
   const handleSignOut = () => {
     signOut();
     navigate('/landing');
   };
-  
+
   if (!user && !['/landing', '/login', '/register'].includes(location.pathname)) {
     return null;
   }
-  
-  return (
-    <header className="bg-white shadow">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
+
+  // Si el usuario no está autenticado, muestra un Navbar simple para landing/login/register
+  if (!user) {
+    return (
+      <header style={{ background: APP_COLORS.blue }} className="w-full shadow-md font-sans">
+        <div className="container mx-auto px-6 py-4 flex justify-between items-center">
           <div className="flex items-center">
+
+            <Briefcase className="h-7 w-7 text-white mr-2" />
+            <span className="text-xl font-bold text-white">JobTracker</span>
+
             <Link to={user ? '/' : '/landing'} className="flex items-center">
               <Briefcase className="h-8 w-8 text-blue-600" />
               <span className="ml-2 text-xl font-semibold text-gray-900">Postulate: gestor de Postulaciones</span>
             </Link>
+
           </div>
-          
           <div className="flex items-center space-x-4">
-            {user ? (
-              <>
-                <Link
-                  to="/"
-                  className={`flex items-center px-3 py-2 rounded-md text-sm font-medium ${
-                    location.pathname === '/' 
-                      ? 'bg-blue-100 text-blue-700' 
-                      : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
-                  }`}
-                >
-                  <LayoutDashboard className="h-5 w-5 mr-1" />
-                  <span>Dashboard</span>
-                </Link>
-                <Link
-                  to="/add"
-                  className={`flex items-center px-3 py-2 rounded-md text-sm font-medium ${
-                    location.pathname === '/add' 
-                      ? 'bg-blue-100 text-blue-700' 
-                      : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900'
-                  }`}
-                >
-                  <PlusCircle className="h-5 w-5 mr-1" />
-                  <span>Nueva Postulación</span>
-                </Link>
-                <div className="flex items-center space-x-3 ml-4 pl-4 border-l border-gray-200">
-                  <div className="flex items-center text-sm text-gray-700">
-                    <User className="h-5 w-5 mr-1 text-gray-500" />
-                    <span>{user.name}</span>
-                  </div>
-                  <button
-                    onClick={handleSignOut}
-                    className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-red-600 hover:bg-red-50"
-                  >
-                    <LogOut className="h-5 w-5 mr-1" />
-                    <span>Cerrar Sesión</span>
-                  </button>
-                </div>
-              </>
-            ) : (
-              <div className="flex items-center space-x-4">
-                <Link
-                  to="/login"
-                  className="text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  Iniciar Sesión
-                </Link>
-                <Link
-                  to="/register"
-                  className="bg-blue-600 text-white hover:bg-blue-700 px-3 py-2 rounded-md text-sm font-medium"
-                >
-                  Crear Cuenta
-                </Link>
-              </div>
-            )}
+            <Link
+              to="/login"
+              className="px-4 py-2 text-sm font-medium text-white hover:text-blue-200 transition-colors"
+            >
+              Iniciar Sesión
+            </Link>
+            <Link
+              to="/register"
+              className="px-4 py-2 text-sm font-medium text-blue-900 bg-white rounded-md hover:bg-blue-50 transition-colors"
+            >
+              Registrarse
+            </Link>
           </div>
+        </div>
+      </header>
+    );
+  }
+
+  // Navbar para usuarios autenticados
+  return (
+    <header style={{ background: APP_COLORS.blue }} className="w-full shadow-md font-sans">
+      <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+        <div className="flex items-center">
+          <Briefcase className="h-7 w-7 text-white mr-2" />
+          <span className="text-xl font-bold text-white">JobTracker</span>
+        </div>
+
+        <div className="flex items-center space-x-6">
+          <Link
+            to="/"
+            className={`text-sm font-medium ${
+              location.pathname === '/'
+                ? 'text-white border-b-2 border-white'
+                : 'text-blue-100 hover:text-white'
+            }`}
+          >
+            Dashboard
+          </Link>
+          <Link
+            to="/add"
+            className={`text-sm font-medium ${
+              location.pathname === '/add'
+                ? 'text-white border-b-2 border-white'
+                : 'text-blue-100 hover:text-white'
+            }`}
+          >
+            Nueva Postulación
+          </Link>
+          <Link
+            to="/profile"
+            className={`text-sm font-medium ${
+              location.pathname === '/profile'
+                ? 'text-white border-b-2 border-white'
+                : 'text-blue-100 hover:text-white'
+            }`}
+          >
+            {user.name}
+          </Link>
+          <button
+            onClick={handleSignOut}
+            className="ml-4 px-4 py-2 text-sm font-medium text-white bg-blue-800 rounded-md hover:bg-blue-700"
+          >
+            Cerrar Sesión
+          </button>
         </div>
       </div>
     </header>
