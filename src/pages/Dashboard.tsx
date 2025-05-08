@@ -1,13 +1,16 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { useApplicationStore } from '../store';
+import { useApplicationStore, useAuthStore } from '../store';
 import ApplicationCard from '../components/ApplicationCard';
 import SearchAndFilter from '../components/SearchAndFilter';
 import ApplicationStats from '../components/ApplicationStats';
-import { ApplicationStatus } from '../types/index';
-import { AlertCircle } from 'lucide-react';
+import { ApplicationStatus } from '../types';
+import { AlertCircle, PlusCircle } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { APP_COLORS } from '../styles/colors';
 
 const Dashboard: React.FC = () => {
   const { applications } = useApplicationStore();
+  const { user } = useAuthStore();
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<ApplicationStatus | 'all'>('all');
   const [companyFilter, setCompanyFilter] = useState('');
@@ -16,7 +19,6 @@ const Dashboard: React.FC = () => {
 
   // Simulate loading state
   useEffect(() => {
-    // Simulate loading state for a short time to ensure components mount correctly
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 500);
@@ -63,12 +65,45 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="container mx-auto px-4 sm:px-8 py-8 font-sans">
-      <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-10">Dashboard</h1>
+      {/* Encabezado con bienvenida */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+        <div>
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">Dashboard</h1>
+          <p className="text-gray-600">¡Bienvenido de nuevo, {user?.name || 'Usuario'}!</p>
+        </div>
 
-      {/* Cards de postulaciones arriba del resumen */}
-      <section className="mb-12">
+        <Link
+          to="/add"
+          className="mt-4 md:mt-0 flex items-center px-5 py-2.5 rounded-lg shadow-sm text-white font-medium"
+          style={{ background: APP_COLORS.blue }}
+        >
+          <PlusCircle className="mr-2 h-5 w-5" />
+          Nueva Postulación
+        </Link>
+      </div>
+
+      {/* Cards de postulaciones - NIVEL 2 */}
+      <section className="mb-10">
+        <h2 className="text-2xl font-semibold text-gray-900 mb-4">Tus Postulaciones</h2>
+
+        {/* Sección de búsqueda y filtros */}
+        <div className="mb-6">
+          <SearchAndFilter
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            statusFilter={statusFilter}
+            setStatusFilter={setStatusFilter}
+            companyFilter={companyFilter}
+            setCompanyFilter={setCompanyFilter}
+            positionFilter={positionFilter}
+            setPositionFilter={setPositionFilter}
+            companies={companies}
+            positions={positions}
+          />
+        </div>
+
         {applications.length === 0 ? (
-          <div className="bg-blue-50 border-l-4 border-blue-400 p-6 rounded-2xl mt-4">
+          <div className="bg-blue-50 border-l-4 border-blue-400 p-6 rounded-xl shadow-sm">
             <div className="flex">
               <div className="flex-shrink-0">
                 <AlertCircle className="h-6 w-6 text-blue-400" />
@@ -81,7 +116,7 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
         ) : filteredApplications.length === 0 ? (
-          <div className="bg-yellow-50 border-l-4 border-yellow-400 p-6 rounded-2xl mt-4">
+          <div className="bg-yellow-50 border-l-4 border-yellow-400 p-6 rounded-xl shadow-sm">
             <div className="flex">
               <div className="flex-shrink-0">
                 <AlertCircle className="h-6 w-6 text-yellow-400" />
@@ -102,26 +137,10 @@ const Dashboard: React.FC = () => {
         )}
       </section>
 
-      {/* Resumen */}
-      <section className="mb-12">
-        <h2 className="text-2xl font-semibold text-gray-900 mb-6">Resumen</h2>
+      {/* Sección de estadísticas */}
+      <section className="mb-8">
+        <h2 className="text-2xl font-semibold text-gray-900 mb-4">Resumen</h2>
         <ApplicationStats />
-      </section>
-
-      {/* Filtros y búsqueda */}
-      <section className="mb-10">
-        <SearchAndFilter
-          searchTerm={searchTerm}
-          setSearchTerm={setSearchTerm}
-          statusFilter={statusFilter}
-          setStatusFilter={setStatusFilter}
-          companyFilter={companyFilter}
-          setCompanyFilter={setCompanyFilter}
-          positionFilter={positionFilter}
-          setPositionFilter={setPositionFilter}
-          companies={companies}
-          positions={positions}
-        />
       </section>
     </div>
   );

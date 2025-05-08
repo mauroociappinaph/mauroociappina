@@ -1,7 +1,8 @@
 import React from 'react';
 import { Search } from 'lucide-react';
-import { ApplicationStatus } from '../types/index';
+import { ApplicationStatus } from '../types';
 import FilterSelects from './FilterSelects';
+import { APP_COLORS } from '../styles/colors';
 
 interface SearchAndFilterProps {
   searchTerm: string;
@@ -33,8 +34,8 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
   const safePositions = Array.isArray(positions) ? positions : [];
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-4 mb-6">
-      <div className="flex flex-col space-y-4">
+    <div className="bg-white rounded-xl shadow-sm p-5 mb-6">
+      <div className="flex flex-col space-y-6">
         {/* Barra de búsqueda */}
         <div className="w-full">
           <div className="relative">
@@ -45,13 +46,14 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
               type="text"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              placeholder="Buscar postulaciones..."
+              className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg shadow-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              placeholder="Buscar por empresa, posición o notas..."
+              style={{ borderColor: APP_COLORS.lightGray }}
             />
           </div>
         </div>
 
-        {/* Filtros con Shadcn Select */}
+        {/* Filtros con FilterSelects component */}
         <FilterSelects
           statusFilter={statusFilter}
           setStatusFilter={setStatusFilter}
@@ -62,6 +64,23 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({
           positionFilter={positionFilter}
           setPositionFilter={setPositionFilter}
         />
+
+        {/* Reset button */}
+        {(searchTerm || statusFilter !== 'all' || companyFilter || positionFilter) && (
+          <div className="flex justify-end">
+            <button
+              onClick={() => {
+                setSearchTerm('');
+                setStatusFilter('all');
+                setCompanyFilter('');
+                setPositionFilter('');
+              }}
+              className="px-4 py-2 text-sm font-medium text-blue-600 hover:text-blue-800 focus:outline-none"
+            >
+              Limpiar filtros
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

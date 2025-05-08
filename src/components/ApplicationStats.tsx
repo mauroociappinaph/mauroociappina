@@ -88,7 +88,7 @@ const ApplicationStats: React.FC = () => {
 
   return (
     <div className="mb-6">
-      <h2 className="text-xl font-semibold text-gray-900 mb-4">Resumen</h2>
+
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
         {stats.map((stat) => (
           <div key={stat.name} className="bg-white overflow-hidden shadow rounded-lg">
