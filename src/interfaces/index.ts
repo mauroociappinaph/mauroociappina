@@ -2,7 +2,11 @@
 // importar desde './ui/' cuando se creen interfaces
 
 // Components
-// - Cards
+// - Atoms
+import { ButtonProps } from './components/atoms';
+// - Molecules
+import { CardProps } from './components/molecules';
+// - Organisms
 import { ApplicationCardProps } from './components/cards/ApplicationCardProps.interface';
 
 // Form
@@ -16,5 +20,10 @@ import { ApplicationCardProps } from './components/cards/ApplicationCardProps.in
 
 export type {
   // Components
+  // - Atoms
+  ButtonProps,
+  // - Molecules
+  CardProps,
+  // - Organisms
   ApplicationCardProps,
 };

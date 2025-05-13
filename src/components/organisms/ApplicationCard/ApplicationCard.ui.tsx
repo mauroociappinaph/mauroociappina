@@ -3,6 +3,8 @@ import { ApplicationCardProps } from '../../../interfaces';
 import { Edit, Trash2, Calendar, AlertTriangle } from 'lucide-react';
 import { APP_COLORS } from '../../../styles/colors';
 import Modal from '../../Modal';
+import Card from '../../molecules/Card';
+import Button from '../../atoms/Button';
 
 // Colores para las etiquetas de estado
 const statusColors: Record<string, string> = {
@@ -38,12 +40,11 @@ const ApplicationCardUI: React.FC<ApplicationCardUIProps> = ({
 }) => {
   const { company, position, status, notes } = application;
 
+  const bgColor = APP_COLORS.cardColors[status as keyof typeof APP_COLORS.cardColors] || 'white';
+
   return (
     <>
-      <div
-        className="rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden"
-        style={{ backgroundColor: APP_COLORS.cardColors[status as keyof typeof APP_COLORS.cardColors] || 'white' }}
-      >
+      <Card bgColor={bgColor} rounded="full">
         <div className="p-6">
           <div className="flex items-start mb-4">
             <div
@@ -75,21 +76,27 @@ const ApplicationCardUI: React.FC<ApplicationCardUIProps> = ({
 
         <div className="border-t border-gray-100 bg-white/60 backdrop-blur-sm px-6 py-3 flex justify-end">
           <div className="flex gap-2">
-            <button
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={handleEdit}
-              className="flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-800"
+              icon={<Edit className="h-4 w-4" />}
+              className="text-blue-600 hover:text-blue-800"
             >
-              <Edit className="h-4 w-4" /> Editar
-            </button>
-            <button
+              Editar
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
               onClick={openDeleteModal}
-              className="flex items-center gap-1 text-sm font-medium text-red-600 hover:text-red-800 ml-4"
+              icon={<Trash2 className="h-4 w-4" />}
+              className="text-red-600 hover:text-red-800 ml-2"
             >
-              <Trash2 className="h-4 w-4" /> Eliminar
-            </button>
+              Eliminar
+            </Button>
           </div>
         </div>
-      </div>
+      </Card>
 
       {/* Modal de confirmación para eliminar */}
       <Modal
@@ -114,20 +121,18 @@ const ApplicationCardUI: React.FC<ApplicationCardUIProps> = ({
           </div>
 
           <div className="flex justify-end space-x-3 mt-4">
-            <button
-              type="button"
+            <Button
+              variant="secondary"
               onClick={closeDeleteModal}
-              className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
               Cancelar
-            </button>
-            <button
-              type="button"
+            </Button>
+            <Button
+              variant="danger"
               onClick={confirmDelete}
-              className="px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-md shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
             >
               Eliminar
-            </button>
+            </Button>
           </div>
         </div>
       </Modal>
