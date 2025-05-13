@@ -2,7 +2,8 @@
 // importar desde './ui/' cuando se creen interfaces
 
 // Components
-// importar desde './components/' cuando se creen interfaces
+// - Cards
+import { ApplicationCardProps } from './components/cards/ApplicationCardProps.interface';
 
 // Form
 // importar desde './form/' cuando se creen interfaces
@@ -14,5 +15,6 @@
 // importar desde './api/' cuando se creen interfaces
 
 export type {
-  // Exportar interfaces aquí cuando se creen
+  // Components
+  ApplicationCardProps,
 };
