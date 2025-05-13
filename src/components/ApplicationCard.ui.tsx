@@ -36,7 +36,7 @@ const ApplicationCardUI: React.FC<ApplicationCardUIProps> = ({
   confirmDelete,
   isDeleteModalOpen,
 }) => {
-  const { id, company, position, status, notes } = application;
+  const {  company, position, status, notes } = application;
 
   return (
     <>
