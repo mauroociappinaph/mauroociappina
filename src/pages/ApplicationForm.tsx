@@ -131,156 +131,151 @@ const ApplicationForm: React.FC = () => {
   };
 
   return (
-    <div className="max-w-3xl mx-auto">
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">
-        {id ? 'Editar Postulación' : 'Nueva Postulación'}
-      </h1>
+    <div className="flex flex-col min-h-[calc(100vh-200px)]">
+      <div className="max-w-3xl mx-auto w-full">
+        <h1 className="text-2xl font-bold text-gray-900 mb-6">
+          {id ? 'Editar Postulación' : 'Nueva Postulación'}
+        </h1>
 
-      <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg p-6">
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          <div>
-            <label
-              htmlFor="company"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Empresa *
-            </label>
-            <input
-              type="text"
-              id="company"
-              value={company}
-              onChange={(e) => setCompany(e.target.value)}
-              className={`block w-full px-3 py-2 border ${
-                errors.company ? 'border-red-300' : 'border-gray-300'
-              } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
-              placeholder="Nombre de la empresa"
-            />
-            {errors.company && (
-              <p className="mt-1 text-sm text-red-600">{errors.company}</p>
-            )}
+        <form onSubmit={handleSubmit} className="bg-white shadow-md rounded-lg p-6 mb-8">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+            <div>
+              <label
+                htmlFor="company"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Empresa *
+              </label>
+              <input
+                type="text"
+                id="company"
+                value={company}
+                onChange={(e) => setCompany(e.target.value)}
+                className={`block w-full px-3 py-2 border ${
+                  errors.company ? 'border-red-300' : 'border-gray-300'
+                } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
+                placeholder="Nombre de la empresa"
+              />
+              {errors.company && (
+                <p className="mt-1 text-sm text-red-600">{errors.company}</p>
+              )}
+            </div>
+
+            <div>
+              <label
+                htmlFor="position"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Puesto *
+              </label>
+              <input
+                type="text"
+                id="position"
+                value={position}
+                onChange={(e) => setPosition(e.target.value)}
+                className={`block w-full px-3 py-2 border ${
+                  errors.position ? 'border-red-300' : 'border-gray-300'
+                } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
+                placeholder="Título del puesto"
+              />
+              {errors.position && (
+                <p className="mt-1 text-sm text-red-600">{errors.position}</p>
+              )}
+            </div>
+
+            <div>
+              <label
+                htmlFor="status"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Estado *
+              </label>
+              <select
+                id="status"
+                value={status}
+                onChange={(e) => setStatus(e.target.value as ApplicationStatus)}
+                className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              >
+                {Object.entries(STATUS_LABELS).map(([value, label]) => (
+                  <option key={value} value={value}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label
+                htmlFor="date"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Fecha de Postulación *
+              </label>
+              <input
+                type="date"
+                id="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                className={`block w-full px-3 py-2 border ${
+                  errors.date ? 'border-red-300' : 'border-gray-300'
+                } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
+              />
+              {errors.date && (
+                <p className="mt-1 text-sm text-red-600">{errors.date}</p>
+              )}
+            </div>
+
+            <div className="md:col-span-2">
+              <label
+                htmlFor="url"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                URL de Referencia
+              </label>
+              <input
+                type="url"
+                id="url"
+                value={url}
+                onChange={(e) => setUrl(e.target.value)}
+                className={`block w-full px-3 py-2 border ${
+                  errors.url ? 'border-red-300' : 'border-gray-300'
+                } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
+                placeholder="https://ejemplo.com/trabajo"
+              />
+              {errors.url && (
+                <p className="mt-1 text-sm text-red-600">{errors.url}</p>
+              )}
+            </div>
+
+            <div className="md:col-span-2">
+              <label
+                htmlFor="notes"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Notas
+              </label>
+              <textarea
+                id="notes"
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                rows={5}
+                className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                placeholder="Añade cualquier información relevante sobre esta postulación"
+              />
+            </div>
           </div>
 
-          <div>
-            <label
-              htmlFor="position"
-              className="block text-sm font-medium text-gray-700 mb-1"
+          <div className="flex justify-end mt-6">
+            <button
+              type="submit"
+              className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
             >
-              Puesto *
-            </label>
-            <input
-              type="text"
-              id="position"
-              value={position}
-              onChange={(e) => setPosition(e.target.value)}
-              className={`block w-full px-3 py-2 border ${
-                errors.position ? 'border-red-300' : 'border-gray-300'
-              } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
-              placeholder="Título del puesto"
-            />
-            {errors.position && (
-              <p className="mt-1 text-sm text-red-600">{errors.position}</p>
-            )}
+              <Save className="h-4 w-4 mr-2" />
+              {id ? 'Actualizar postulación' : 'Guardar postulación'}
+            </button>
           </div>
-
-          <div>
-            <label
-              htmlFor="status"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Estado *
-            </label>
-            <select
-              id="status"
-              value={status}
-              onChange={(e) => setStatus(e.target.value as ApplicationStatus)}
-              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-            >
-              {Object.entries(STATUS_LABELS).map(([value, label]) => (
-                <option key={value} value={value}>
-                  {label}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label
-              htmlFor="date"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Fecha de Postulación *
-            </label>
-            <input
-              type="date"
-              id="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              className={`block w-full px-3 py-2 border ${
-                errors.date ? 'border-red-300' : 'border-gray-300'
-              } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
-            />
-            {errors.date && (
-              <p className="mt-1 text-sm text-red-600">{errors.date}</p>
-            )}
-          </div>
-
-          <div className="md:col-span-2">
-            <label
-              htmlFor="url"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              URL de Referencia
-            </label>
-            <input
-              type="url"
-              id="url"
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              className={`block w-full px-3 py-2 border ${
-                errors.url ? 'border-red-300' : 'border-gray-300'
-              } rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm`}
-              placeholder="https://ejemplo.com/trabajo"
-            />
-            {errors.url && (
-              <p className="mt-1 text-sm text-red-600">{errors.url}</p>
-            )}
-          </div>
-
-          <div className="md:col-span-2">
-            <label
-              htmlFor="notes"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Notas
-            </label>
-            <textarea
-              id="notes"
-              value={notes}
-              onChange={(e) => setNotes(e.target.value)}
-              rows={4}
-              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-              placeholder="Información adicional, contactos, datos relevantes..."
-            />
-          </div>
-        </div>
-
-        <div className="mt-6 flex justify-end">
-          <button
-            type="button"
-            onClick={() => navigate('/')}
-            className="mr-3 inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-          >
-            Cancelar
-          </button>
-          <button
-            type="submit"
-            className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-          >
-            <Save className="h-4 w-4 mr-1" />
-            Guardar
-          </button>
-        </div>
-      </form>
+        </form>
+      </div>
 
       <Modal
         isOpen={showDuplicateModal}
