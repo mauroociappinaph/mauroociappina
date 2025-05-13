@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useApplicationStore, useAuthStore } from '../store';
-import ApplicationCard from '../components/ApplicationCard';
+import ApplicationCard from '../components/organisms/ApplicationCard';
 import SearchAndFilter from '../components/SearchAndFilter';
 import ApplicationStats from '../components/ApplicationStats';
 import { ApplicationStatus } from '../types';
@@ -17,11 +17,11 @@ const Dashboard: React.FC = () => {
   const [positionFilter, setPositionFilter] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
-  // Simulate loading state
+  // Simulate loading state - reducido a 300ms para una mejor experiencia
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 500);
+    }, 300);
 
     return () => clearTimeout(timer);
   }, []);
@@ -60,7 +60,14 @@ const Dashboard: React.FC = () => {
   }, [applications, searchTerm, statusFilter, companyFilter, positionFilter]);
 
   if (isLoading) {
-    return <div className="p-8 text-lg font-medium">Cargando dashboard...</div>;
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-500 mx-auto mb-3"></div>
+          <p className="text-gray-600">Cargando dashboard...</p>
+        </div>
+      </div>
+    );
   }
 
   return (

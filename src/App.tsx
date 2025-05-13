@@ -12,10 +12,19 @@ import { useAuthStore } from './store';
 const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, loading } = useAuthStore();
 
+  // Mostrar un indicador de carga solo si realmente estamos cargando
   if (loading) {
-    return <div className="p-4">Cargando...</div>;
+    return (
+      <div className="flex items-center justify-center h-screen bg-gray-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <p className="text-gray-600">Cargando...</p>
+        </div>
+      </div>
+    );
   }
 
+  // Redirigir si no hay usuario
   if (!user) {
     return <Navigate to="/landing" replace />;
   }
@@ -24,7 +33,12 @@ const PrivateRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => 
 };
 
 function App() {
-  const { user } = useAuthStore();
+  const { user, initialize } = useAuthStore();
+
+  // Inicializar el store de autenticación al cargar la app
+  useEffect(() => {
+    initialize();
+  }, [initialize]);
 
   // Log the authentication state for debugging
   useEffect(() => {
@@ -47,7 +61,7 @@ function App() {
             <Route path="edit/:id" element={<ApplicationForm />} />
             <Route path="profile" element={<EditProfile />} />
           </Route>
-        <Route path="*" element={<Navigate to={user ? "/" : "/landing"} replace />} />
+          <Route path="*" element={<Navigate to={user ? "/" : "/landing"} replace />} />
         </Routes>
       </Router>
   );
