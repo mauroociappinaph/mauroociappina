@@ -5,17 +5,9 @@ import { APP_COLORS } from '../../../styles/colors';
 import Modal from '../../Modal';
 import Card from '../../molecules/Card';
 import Button from '../../atoms/Button';
+import { StatusHelpers } from '../../../lib/helpers';
 
-// Colores para las etiquetas de estado
-const statusColors: Record<string, string> = {
-  applied: 'bg-blue-100 text-blue-700',
-  interview: 'bg-purple-100 text-purple-700',
-  technical: 'bg-orange-100 text-orange-700',
-  offer: 'bg-teal-100 text-teal-700',
-  rejected: 'bg-red-100 text-red-700',
-  accepted: 'bg-green-100 text-green-700',
-};
-
+// Definimos la interfaz para las props del UI
 interface ApplicationCardUIProps extends ApplicationCardProps {
   formattedDate: string;
   getInitials: (companyName: string) => string;
@@ -41,6 +33,7 @@ const ApplicationCardUI: React.FC<ApplicationCardUIProps> = ({
   const { company, position, status, notes } = application;
 
   const bgColor = APP_COLORS.cardColors[status as keyof typeof APP_COLORS.cardColors] || 'white';
+  const statusClassName = StatusHelpers.getStatusClasses(status);
 
   return (
     <>
@@ -58,7 +51,7 @@ const ApplicationCardUI: React.FC<ApplicationCardUIProps> = ({
               <p className="text-gray-700">{position}</p>
             </div>
             <div>
-              <span className={`${statusColors[status]} px-3 py-1 rounded-full text-sm font-medium`}>
+              <span className={`${statusClassName} px-3 py-1 rounded-full text-sm font-medium`}>
                 {getStatusLabel(status)}
               </span>
             </div>
@@ -76,29 +69,22 @@ const ApplicationCardUI: React.FC<ApplicationCardUIProps> = ({
 
         <div className="border-t border-gray-100 bg-white/60 backdrop-blur-sm px-6 py-3 flex justify-end">
           <div className="flex gap-2">
-            <Button
-              variant="ghost"
-              size="sm"
+            <button
               onClick={handleEdit}
-              icon={<Edit className="h-4 w-4" />}
-              className="text-blue-600 hover:text-blue-800"
+              className="flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-800"
             >
-              Editar
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
+              <Edit className="h-4 w-4" /> Editar
+            </button>
+            <button
               onClick={openDeleteModal}
-              icon={<Trash2 className="h-4 w-4" />}
-              className="text-red-600 hover:text-red-800 ml-2"
+              className="flex items-center gap-1 text-sm font-medium text-red-600 hover:text-red-800 ml-4"
             >
-              Eliminar
-            </Button>
+              <Trash2 className="h-4 w-4" /> Eliminar
+            </button>
           </div>
         </div>
       </Card>
 
-      {/* Modal de confirmación para eliminar */}
       <Modal
         isOpen={isDeleteModalOpen}
         onClose={closeDeleteModal}
