@@ -4,6 +4,7 @@ import { useApplicationStore } from '../store';
 import { ApplicationStatus  , STATUS_LABELS} from '../types/index';
 import Modal from '../components/Modal';
 import { Save, AlertCircle } from 'lucide-react';
+import { ValidationHelpers, DateHelpers } from '../lib/helpers';
 
 const ApplicationForm: React.FC = () => {
   const { id } = useParams();
@@ -22,9 +23,8 @@ const ApplicationForm: React.FC = () => {
 
   // Set today's date as default
   useEffect(() => {
-    const today = new Date().toISOString().split('T')[0];
     if (!date) {
-      setDate(today);
+      setDate(DateHelpers.getCurrentDateISO());
     }
   }, [date]);
 
@@ -48,11 +48,11 @@ const ApplicationForm: React.FC = () => {
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
-    if (!company.trim()) {
+    if (!ValidationHelpers.hasContent(company)) {
       newErrors.company = 'La empresa es requerida';
     }
 
-    if (!position.trim()) {
+    if (!ValidationHelpers.hasContent(position)) {
       newErrors.position = 'El puesto es requerido';
     }
 
@@ -60,23 +60,12 @@ const ApplicationForm: React.FC = () => {
       newErrors.date = 'La fecha es requerida';
     }
 
-    if (url && !isValidUrl(url)) {
+    if (url && !ValidationHelpers.isValidUrl(url)) {
       newErrors.url = 'La URL debe ser válida';
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
-  };
-
-  const isValidUrl = (url: string) => {
-    try {
-      new URL(url);
-      return true;
-    } catch (error) {
-      console.log(error);
-      return false;
-
-    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
