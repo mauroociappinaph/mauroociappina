@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Dashboard from './pages/Dashboard';
 import ApplicationForm from './pages/ApplicationForm';
-import Layout from './components/Layout';
+import Layout from './components/templates/Layout';
 import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Register from './pages/Register';
