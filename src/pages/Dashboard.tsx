@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { useApplicationStore, useAuthStore } from '../store';
-import ApplicationCard from '../components/ApplicationCard';
+import ApplicationCard from '../components/organisms/ApplicationCard';
 import SearchAndFilter from '../components/SearchAndFilter';
 import ApplicationStats from '../components/ApplicationStats';
 import { ApplicationStatus } from '../types';
@@ -16,51 +16,123 @@ const Dashboard: React.FC = () => {
   const [companyFilter, setCompanyFilter] = useState('');
   const [positionFilter, setPositionFilter] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  // Estado para errores
+  const [error, setError] = useState<string | null>(null);
 
-  // Simulate loading state
+  // Simulate loading state - reducido a 300ms para una mejor experiencia
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 500);
+    }, 300);
 
     return () => clearTimeout(timer);
   }, []);
 
+  // Manejadores de filtro seguros
+  const handleSetCompanyFilter = (value: string) => {
+    try {
+      setCompanyFilter(value);
+    } catch (error) {
+      console.error("Error al configurar el filtro de empresa:", error);
+      setError("Ocurrió un error con los filtros. Por favor, recarga la página.");
+      // Restablecer el filtro en caso de error
+      setCompanyFilter('');
+    }
+  };
+
+  const handleSetPositionFilter = (value: string) => {
+    try {
+      setPositionFilter(value);
+    } catch (error) {
+      console.error("Error al configurar el filtro de puesto:", error);
+      setError("Ocurrió un error con los filtros. Por favor, recarga la página.");
+      // Restablecer el filtro en caso de error
+      setPositionFilter('');
+    }
+  };
+
   // Get unique companies and positions for filters
   const companies = useMemo(() => {
-    const uniqueCompanies = new Set(applications.map(app => app.company));
-    return Array.from(uniqueCompanies).sort();
+    try {
+      const uniqueCompanies = new Set(applications.map(app => app.company));
+      return Array.from(uniqueCompanies).sort();
+    } catch (error) {
+      console.error("Error al obtener empresas únicas:", error);
+      return [];
+    }
   }, [applications]);
 
   const positions = useMemo(() => {
-    const uniquePositions = new Set(applications.map(app => app.position));
-    return Array.from(uniquePositions).sort();
+    try {
+      const uniquePositions = new Set(applications.map(app => app.position));
+      return Array.from(uniquePositions).sort();
+    } catch (error) {
+      console.error("Error al obtener puestos únicos:", error);
+      return [];
+    }
   }, [applications]);
 
   // Filter applications based on search and filters
   const filteredApplications = useMemo(() => {
-    return applications.filter(app => {
-      // Text search
-      const searchMatch = searchTerm === '' ||
-        app.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        app.position.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (app.notes && app.notes.toLowerCase().includes(searchTerm.toLowerCase()));
+    try {
+      return applications.filter(app => {
+        // Text search
+        const searchMatch = searchTerm === '' ||
+          app.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          app.position.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          (app.notes && app.notes.toLowerCase().includes(searchTerm.toLowerCase()));
 
-      // Status filter
-      const statusMatch = statusFilter === 'all' || app.status === statusFilter;
+        // Status filter
+        const statusMatch = statusFilter === 'all' || app.status === statusFilter;
 
-      // Company filter
-      const companyMatch = companyFilter === '' || app.company === companyFilter;
+        // Company filter
+        const companyMatch = companyFilter === '' || app.company === companyFilter;
 
-      // Position filter
-      const positionMatch = positionFilter === '' || app.position === positionFilter;
+        // Position filter
+        const positionMatch = positionFilter === '' || app.position === positionFilter;
 
-      return searchMatch && statusMatch && companyMatch && positionMatch;
-    });
+        return searchMatch && statusMatch && companyMatch && positionMatch;
+      });
+    } catch (error) {
+      console.error("Error al filtrar aplicaciones:", error);
+      setError("Ocurrió un error al filtrar. Por favor, recarga la página.");
+      return [];
+    }
   }, [applications, searchTerm, statusFilter, companyFilter, positionFilter]);
 
   if (isLoading) {
-    return <div className="p-8 text-lg font-medium">Cargando dashboard...</div>;
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-500 mx-auto mb-3"></div>
+          <p className="text-gray-600">Cargando dashboard...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Si hay un error, mostrar mensaje de error
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="bg-red-50 border-l-4 border-red-400 p-6 rounded-xl shadow-sm max-w-2xl">
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <AlertCircle className="h-6 w-6 text-red-400" />
+            </div>
+            <div className="ml-4">
+              <p className="text-base text-red-700">{error}</p>
+              <button
+                onClick={() => window.location.reload()}
+                className="mt-3 px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-md hover:bg-red-700"
+              >
+                Recargar página
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -94,9 +166,9 @@ const Dashboard: React.FC = () => {
             statusFilter={statusFilter}
             setStatusFilter={setStatusFilter}
             companyFilter={companyFilter}
-            setCompanyFilter={setCompanyFilter}
+            setCompanyFilter={handleSetCompanyFilter}
             positionFilter={positionFilter}
-            setPositionFilter={setPositionFilter}
+            setPositionFilter={handleSetPositionFilter}
             companies={companies}
             positions={positions}
           />

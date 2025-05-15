@@ -16,52 +16,69 @@ const MOCK_USERS = [
 
 export const useAuthStore = create<AuthState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       user: null,
       loading: false,
+      initialize: () => {
+        const { user } = get();
+
+        if (user) {
+          set({ loading: false });
+        }
+
+        console.log('Auth store inicializado', { user, loading: false });
+      },
       signIn: async (email: string, password: string) => {
         set({ loading: true });
 
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        try {
+          await new Promise(resolve => setTimeout(resolve, 1000));
 
-        const user = MOCK_USERS.find(u =>
-          u.email === email && u.password === password
-        );
+          const user = MOCK_USERS.find(u =>
+            u.email === email && u.password === password
+          );
 
-        if (!user) {
+          if (!user) {
+            set({ loading: false });
+            throw new Error('Credenciales inválidas');
+          }
+
+          const { password: _, ...userWithoutPassword } = user;
+          set({ user: userWithoutPassword, loading: false });
+        } catch (error) {
           set({ loading: false });
-          throw new Error('Credenciales inválidas');
+          throw error;
         }
-
-        const { password: _, ...userWithoutPassword } = user;
-        set({ user: userWithoutPassword, loading: false });
       },
       signUp: async (email: string, password: string, name: string) => {
         set({ loading: true });
 
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        try {
+          await new Promise(resolve => setTimeout(resolve, 1000));
 
-        if (MOCK_USERS.some(u => u.email === email)) {
+          if (MOCK_USERS.some(u => u.email === email)) {
+            set({ loading: false });
+            throw new Error('El email ya está registrado');
+          }
+
+          const newUser = {
+            id: crypto.randomUUID(),
+            email,
+            name,
+            password
+          };
+
+          MOCK_USERS.push(newUser);
+
+          const { password: _, ...userWithoutPassword } = newUser;
+          set({ user: userWithoutPassword, loading: false });
+        } catch (error) {
           set({ loading: false });
-          throw new Error('El email ya está registrado');
+          throw error;
         }
-
-        const newUser = {
-          id: crypto.randomUUID(),
-          email,
-          name,
-          password
-        };
-
-        MOCK_USERS.push(newUser);
-
-        const { password: _, ...userWithoutPassword } = newUser;
-        set({ user: userWithoutPassword, loading: false });
       },
       signOut: () => {
-        set({ user: null });
+        set({ user: null, loading: false });
       },
       updateUser: (data: { name?: string; email?: string }) =>
         set((state) => ({

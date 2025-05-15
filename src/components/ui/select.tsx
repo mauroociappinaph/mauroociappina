@@ -4,7 +4,18 @@ import { Check, ChevronDown, ChevronUp } from "lucide-react";
 
 import { cn } from "../../lib/utils";
 
-const Select = SelectPrimitive.Root;
+// Utilizamos un envoltorio para asegurarnos de que siempre haya un valor válido
+const SafeSelectRoot = (props: React.ComponentPropsWithoutRef<typeof SelectPrimitive.Root>) => {
+  // Asegurar que el valor siempre sea una string válida
+  const safeProps = {
+    ...props,
+    value: props.value || props.defaultValue || undefined,
+  };
+
+  return <SelectPrimitive.Root {...safeProps} />;
+};
+
+const Select = SafeSelectRoot;
 
 const SelectGroup = SelectPrimitive.Group;
 

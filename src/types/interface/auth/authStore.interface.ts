@@ -8,6 +8,7 @@ export interface User {
 export interface AuthState {
   user: User | null;
   loading: boolean;
+  initialize: () => void;
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, name: string) => Promise<void>;
   signOut: () => void;

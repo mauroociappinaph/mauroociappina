@@ -37,17 +37,33 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({
 
   // Handlers para convertir valores "all" a cadenas vacías y viceversa
   const handleCompanyChange = (value: string) => {
-    setCompanyFilter(value === "all" ? "" : value);
+    try {
+      setCompanyFilter(value === "all" ? "" : value);
+    } catch (error) {
+      console.error("Error al cambiar el filtro de empresa:", error);
+      // Restablecer el filtro en caso de error
+      setCompanyFilter("");
+    }
   };
 
   const handlePositionChange = (value: string) => {
-    setPositionFilter(value === "all" ? "" : value);
+    try {
+      setPositionFilter(value === "all" ? "" : value);
+    } catch (error) {
+      console.error("Error al cambiar el filtro de puesto:", error);
+      // Restablecer el filtro en caso de error
+      setPositionFilter("");
+    }
   };
 
   // Badge counter para mostrar cuántos elementos hay en cada categoría
   const getBadgeCounter = (items: string[]) => {
     return items.length > 0 ? `(${items.length})` : '';
   };
+
+  // Valores seguros para los selects que nunca deben ser undefined
+  const safeCompanyValue = companyFilter === "" ? "all" : companyFilter;
+  const safePositionValue = positionFilter === "" ? "all" : positionFilter;
 
   return (
     <div className="flex flex-col md:flex-row gap-4">
@@ -79,7 +95,11 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({
           <Building2 className="h-4 w-4" />
           <span>Empresa {getBadgeCounter(companies)}</span>
         </div>
-        <Select value={companyFilter === "" ? "all" : companyFilter} onValueChange={handleCompanyChange}>
+        <Select
+          value={safeCompanyValue}
+          onValueChange={handleCompanyChange}
+          defaultValue="all"
+        >
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Todas las empresas" />
           </SelectTrigger>
@@ -102,7 +122,11 @@ const FilterSelects: React.FC<FilterSelectsProps> = ({
           <Briefcase className="h-4 w-4" />
           <span>Puesto {getBadgeCounter(positions)}</span>
         </div>
-        <Select value={positionFilter === "" ? "all" : positionFilter} onValueChange={handlePositionChange}>
+        <Select
+          value={safePositionValue}
+          onValueChange={handlePositionChange}
+          defaultValue="all"
+        >
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Todos los puestos" />
           </SelectTrigger>
