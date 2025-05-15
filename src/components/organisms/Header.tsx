@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Briefcase, ArrowRight } from 'lucide-react';
-import { APP_COLORS } from '../styles/colors';
+import { APP_COLORS } from '../../styles/colors';
 
 const Header: React.FC = () => {
   return (

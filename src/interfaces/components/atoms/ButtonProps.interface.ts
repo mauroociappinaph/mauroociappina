@@ -1,14 +1,12 @@
 import React from 'react';
 
-interface ButtonProps {
-  onClick?: () => void;
+export interface ButtonProps {
   children: React.ReactNode;
+  onClick?: () => void;
+  type?: 'button' | 'submit' | 'reset';
   variant?: 'primary' | 'secondary' | 'danger' | 'ghost';
   size?: 'sm' | 'md' | 'lg';
-  className?: string;
-  type?: 'button' | 'submit' | 'reset';
   disabled?: boolean;
+  className?: string;
   icon?: React.ReactNode;
 }
-
-export type { ButtonProps };

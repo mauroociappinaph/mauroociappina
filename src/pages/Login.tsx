@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Briefcase, Mail, Lock, AlertCircle } from 'lucide-react';
-import { useAuthStore } from '../store/authStore';
+import { useAuthStore } from '../store/auth/authStore';
 import { APP_COLORS } from '../styles/colors';
 
 const Login: React.FC = () => {
@@ -14,7 +14,6 @@ const Login: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-
     try {
       await signIn(email, password);
       navigate('/');

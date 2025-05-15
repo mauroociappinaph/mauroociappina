@@ -1,34 +1,34 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { ApplicationState , Application } from '../types/index';
+import { Postulation, PostulationState } from '../../types/interface/postulations/postulation';
 
 
-export const useApplicationStore = create<ApplicationState>()(
+export const usePostulationsStore = create<PostulationState>()(
   persist(
     (set, get) => ({
-      applications: [],
+      postulations: [],
 
-      addApplication: (newApplication) => {
+      addPostulation: (newPostulation) => {
         const timestamp = new Date().toISOString();
         const id = crypto.randomUUID();
 
-        const application: Application = {
-          ...newApplication,
+        const postulation: Postulation = {
+          ...newPostulation,
           id,
           createdAt: timestamp,
           updatedAt: timestamp
         };
 
         set((state) => ({
-          applications: [application, ...state.applications]
+          postulations: [postulation, ...state.postulations]
         }));
 
         return id;
       },
 
-      updateApplication: (id, updatedFields) => {
+      updatePostulation: (id, updatedFields) => {
         set((state) => ({
-          applications: state.applications.map(app =>
+          postulations: state.postulations.map(app =>
             app.id === id
               ? { ...app, ...updatedFields, updatedAt: new Date().toISOString() }
               : app
@@ -36,25 +36,25 @@ export const useApplicationStore = create<ApplicationState>()(
         }));
       },
 
-      deleteApplication: (id) => {
+      deletePostulation: (id) => {
         set((state) => ({
-          applications: state.applications.filter(app => app.id !== id)
+          postulations: state.postulations.filter(app => app.id !== id)
         }));
       },
 
-      getApplication: (id) => {
-        return get().applications.find(app => app.id === id);
+      getPostulation: (id) => {
+        return get().postulations.find(app => app.id === id);
       },
 
       checkDuplicate: (company, position) => {
-        return get().applications.some(
+        return get().postulations.some(
           app => app.company.toLowerCase() === company.toLowerCase() &&
                 app.position.toLowerCase() === position.toLowerCase()
         );
       }
     }),
     {
-      name: 'job-applications-storage'
+        name: 'job-potulations-storage'
     }
   )
 );

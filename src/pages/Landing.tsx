@@ -1,6 +1,6 @@
 import React from 'react';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
+import Header from '../components/organisms/Header';
+import Footer from '../components/organisms/Footer';
 import { APP_COLORS } from '../styles/colors';
 import { CheckCircle2, BarChart2, Search } from 'lucide-react';
 

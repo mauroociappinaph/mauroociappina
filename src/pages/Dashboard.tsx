@@ -1,18 +1,18 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { useApplicationStore, useAuthStore } from '../store';
+import { usePostulationsStore, useAuthStore } from '../store';
 import ApplicationCard from '../components/organisms/ApplicationCard';
-import SearchAndFilter from '../components/SearchAndFilter';
-import ApplicationStats from '../components/ApplicationStats';
-import { ApplicationStatus } from '../types';
+import SearchAndFilter from '../components/organisms/SearchAndFilter';
+import ApplicationStats from '../components/organisms/ApplicationStats';
+import { Postulation, PostulationStatus } from '../types/interface/postulations/postulation';
 import { AlertCircle, PlusCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { APP_COLORS } from '../styles/colors';
 
 const Dashboard: React.FC = () => {
-  const { applications } = useApplicationStore();
+  const { postulations } = usePostulationsStore();
   const { user } = useAuthStore();
   const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState<ApplicationStatus | 'all'>('all');
+      const [statusFilter, setStatusFilter] = useState<PostulationStatus | 'all'>('all');
   const [companyFilter, setCompanyFilter] = useState('');
   const [positionFilter, setPositionFilter] = useState('');
   const [isLoading, setIsLoading] = useState(true);
@@ -54,28 +54,28 @@ const Dashboard: React.FC = () => {
   // Get unique companies and positions for filters
   const companies = useMemo(() => {
     try {
-      const uniqueCompanies = new Set(applications.map(app => app.company));
+      const uniqueCompanies = new Set(postulations.map((app: Postulation) => app.company));
       return Array.from(uniqueCompanies).sort();
     } catch (error) {
       console.error("Error al obtener empresas únicas:", error);
       return [];
     }
-  }, [applications]);
+  }, [postulations]);
 
   const positions = useMemo(() => {
     try {
-      const uniquePositions = new Set(applications.map(app => app.position));
+      const uniquePositions = new Set(postulations.map((app: Postulation) => app.position));
       return Array.from(uniquePositions).sort();
     } catch (error) {
       console.error("Error al obtener puestos únicos:", error);
       return [];
     }
-  }, [applications]);
+  }, [postulations]);
 
   // Filter applications based on search and filters
   const filteredApplications = useMemo(() => {
     try {
-      return applications.filter(app => {
+      return postulations.filter((app: Postulation) => {
         // Text search
         const searchMatch = searchTerm === '' ||
           app.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -98,7 +98,7 @@ const Dashboard: React.FC = () => {
       setError("Ocurrió un error al filtrar. Por favor, recarga la página.");
       return [];
     }
-  }, [applications, searchTerm, statusFilter, companyFilter, positionFilter]);
+  }, [postulations, searchTerm, statusFilter, companyFilter, positionFilter]);
 
   if (isLoading) {
     return (
@@ -169,12 +169,12 @@ const Dashboard: React.FC = () => {
             setCompanyFilter={handleSetCompanyFilter}
             positionFilter={positionFilter}
             setPositionFilter={handleSetPositionFilter}
-            companies={companies}
-            positions={positions}
+            companies={companies as string[]}
+            positions={positions as string[]}
           />
         </div>
 
-        {applications.length === 0 ? (
+        {postulations.length === 0 ? (
           <div className="bg-blue-50 border-l-4 border-blue-400 p-6 rounded-xl shadow-sm">
             <div className="flex">
               <div className="flex-shrink-0">
@@ -202,7 +202,7 @@ const Dashboard: React.FC = () => {
           </div>
         ) : (
           <div className="grid gap-8 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-            {filteredApplications.map(application => (
+              {filteredApplications.map((application: Postulation) => (
               <ApplicationCard key={application.id} application={application} />
             ))}
           </div>

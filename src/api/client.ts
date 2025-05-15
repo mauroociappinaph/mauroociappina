@@ -9,7 +9,7 @@ export const client = {
       headers: {
         'Content-Type': 'application/json',
       },
-      credentials: 'include', // Para manejar cookies en solicitudes cross-origin
+      credentials: 'include',
     });
 
     if (!response.ok) {
@@ -20,7 +20,7 @@ export const client = {
   },
 
   // Método POST
-  async post<T>(endpoint: string, data: any): Promise<T> {
+  async post<T>(endpoint: string, data: unknown): Promise<T> {
     const response = await fetch(`${API_URL}${endpoint}`, {
       method: 'POST',
       headers: {
@@ -38,7 +38,7 @@ export const client = {
   },
 
   // Método PUT
-  async put<T>(endpoint: string, data: any): Promise<T> {
+  async put<T>(endpoint: string, data: unknown): Promise<T> {
     const response = await fetch(`${API_URL}${endpoint}`, {
       method: 'PUT',
       headers: {

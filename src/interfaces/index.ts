@@ -1,29 +1,67 @@
-// UI
-// importar desde './ui/' cuando se creen interfaces
+/**
+ * Punto de entrada para todas las interfaces
+ * Exporta todas las interfaces organizadas por dominio
+ */
 
-// Components
-// - Atoms
-import { ButtonProps } from './components/atoms';
-// - Molecules
-import { CardProps } from './components/molecules';
-// - Organisms
-import { ApplicationCardProps } from './components/cards/ApplicationCardProps.interface';
-
-// Form
-// importar desde './form/' cuando se creen interfaces
+// UI Components
+import { ButtonProps, CardProps, ApplicationCardProps } from './components';
+import { ModalProps } from './ui';
 
 // Auth
-// importar desde './auth/' cuando se creen interfaces
+import { User, LoginRequest, RegisterRequest, UserWithPassword } from './auth';
 
 // API
-// importar desde './api/' cuando se creen interfaces
+import { ApiResponse } from './api';
+
+// Form
+import { FormFieldProps } from './form';
+
+// Types
+import { Postulation } from '../types/interface/postulations/postulation';
 
 export type {
-  // Components
-  // - Atoms
+  // UI Components
   ButtonProps,
-  // - Molecules
   CardProps,
-  // - Organisms
   ApplicationCardProps,
+  ModalProps,
+
+  // Auth
+  User,
+  LoginRequest,
+  RegisterRequest,
+  UserWithPassword,
+
+  // API
+  ApiResponse,
+
+  // Form
+  FormFieldProps,
+
+  // Types
+  Postulation
 };
+
+// Exportar grupos con alias para mayor claridad en importaciones
+import * as UIComponents from './components';
+import * as Auth from './auth';
+import * as API from './api';
+import * as Form from './form';
+
+// Exportar los grupos completos
+export {
+  UIComponents,
+  Auth,
+  API,
+  Form
+};
+
+export interface AuthState {
+  user: User | null;
+  loading: boolean;
+  initialize: () => void;
+  signIn: (email: string, password: string) => Promise<void>;
+  signUp: (email: string, password: string, name: string, userName: string, lastName: string) => Promise<void>;
+  signOut: () => void;
+  updateUser: (data: { name?: string; email?: string }) => void;
+}

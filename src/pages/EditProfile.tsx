@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useAuthStore } from '../store/authStore';
+import { useAuthStore } from '../store/auth/authStore';
 import { Input } from '../components/ui/input';
 import { APP_COLORS } from '../styles/colors';
 import { Check, Save, User } from 'lucide-react';

@@ -2,7 +2,7 @@ import React from 'react';
 import { ApplicationCardProps } from '../interfaces';
 import { Edit, Trash2, Calendar, AlertTriangle } from 'lucide-react';
 import { APP_COLORS } from '../styles/colors';
-import Modal from './Modal';
+import Modal from './molecules/Modal';
 
 // Colores para las etiquetas de estado
 const statusColors: Record<string, string> = {
