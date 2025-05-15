@@ -1,32 +1,32 @@
 import React, { useMemo } from 'react';
-import { usePotulationsStore } from '../../store';
-import { Potulation, PotulationStatus, STATUS_LABELS } from '../../types/interface/postulations/application';
+import { usePostulationsStore } from '../../store';
+import { Postulation, PostulationStatus, STATUS_LABELS } from '../../types/interface/postulations/postulation';
 import { PieChart, Activity, Users, Calendar } from 'lucide-react';
 
 const ApplicationStats: React.FC = () => {
-  const { potulations } = usePotulationsStore();
+  const { postulations } = usePostulationsStore();
 
   // Count by status
   const statusCounts = useMemo(() => {
-    return potulations.reduce((acc: Record<PotulationStatus, number>, app: Potulation) => {
+    return postulations.reduce((acc: Record<PostulationStatus, number>, app: Postulation) => {
       acc[app.status] = (acc[app.status] || 0) + 1;
       return acc;
-    }, {} as Record<PotulationStatus, number>);
-  }, [potulations]);
+    }, {} as Record<PostulationStatus, number>);
+  }, [postulations]);
 
   // Total count
-  const totalApplications = potulations.length;
+  const totalApplications = postulations.length;
 
   // Active applications (not rejected or accepted)
   const activeApplications = useMemo(() => {
-    return potulations.filter(
-      (app: Potulation) => app.status !== 'rejected' && app.status !== 'accepted'
+    return postulations.filter(
+      (app: Postulation) => app.status !== 'rejected' && app.status !== 'accepted'
     ).length;
-  }, [potulations]);
+  }, [postulations]);
 
   // Get company with most applications
   const topCompany = useMemo(() => {
-    const companyCount = potulations.reduce((acc: Record<string, number>, app: Potulation) => {
+    const companyCount = postulations.reduce((acc: Record<string, number>, app: Postulation) => {
       acc[app.company] = (acc[app.company] || 0) + 1;
       return acc;
     }, {} as Record<string, number>);
@@ -39,17 +39,17 @@ const ApplicationStats: React.FC = () => {
     });
 
     return topCompany;
-  }, [potulations]);
+  }, [postulations]);
 
   // Applications in the last 30 days
   const recentApplications = useMemo(() => {
     const last30Days = new Date();
     last30Days.setDate(last30Days.getDate() - 30);
 
-    return potulations.filter(
-      (app: Potulation) => new Date(app.date) >= last30Days
+    return postulations.filter(
+      (app: Postulation) => new Date(app.date) >= last30Days
     ).length;
-  }, [potulations]);
+  }, [postulations]);
 
   const stats = [
     {
@@ -75,7 +75,7 @@ const ApplicationStats: React.FC = () => {
   ];
 
   // Si no hay aplicaciones, mostrar un mensaje simplificado
-  if (potulations.length === 0) {
+  if (postulations.length === 0) {
     return (
       <div className="mb-6">
         <h2 className="text-xl font-semibold text-gray-900 mb-4">Resumen</h2>
@@ -119,7 +119,7 @@ const ApplicationStats: React.FC = () => {
                   'bg-green-500'}`}
               />
               <p className="mt-2 text-sm font-medium text-gray-600">{label}</p>
-              <p className="text-xl font-semibold text-gray-900">{statusCounts[status as PotulationStatus] || 0}</p>
+              <p className="text-xl font-semibold text-gray-900">{statusCounts[status as PostulationStatus] || 0}</p>
             </div>
           ))}
         </div>

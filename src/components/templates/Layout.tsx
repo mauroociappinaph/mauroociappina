@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
-import Navbar from './Navbar';
-import { APP_COLORS } from '../styles/colors';
+import Navbar from '../organisms/Navbar';
+import { APP_COLORS } from '../../styles/colors';
 
 const LoadingIndicator: React.FC = () => (
   <div className="flex items-center justify-center h-64">

@@ -33,7 +33,7 @@ const Button: React.FC<ButtonProps> = ({
       type={type}
       onClick={onClick}
       disabled={disabled}
-      className={`${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${disabledStyles} ${className}`}
+      className={`${baseStyles} ${variantStyles[variant]} ${sizeStyles[size as keyof typeof sizeStyles]} ${disabledStyles} ${className}`}
     >
       {icon && <span className="mr-2">{icon}</span>}
       {children}

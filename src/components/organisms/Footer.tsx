@@ -1,5 +1,5 @@
 import React from 'react';
-import { APP_COLORS } from '../styles/colors';
+import { APP_COLORS } from '../../styles/colors';
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();

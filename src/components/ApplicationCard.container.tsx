@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { usePotulationsStore } from '../store';
-import { Potulation } from '../types';
-import ApplicationCardUI from './ApplicationCard.ui';
+import { usePostulationsStore } from '../store';
+import { Postulation } from '../types/interface/postulations/postulation';
+import ApplicationCardUI from './organisms/ApplicationCard/ApplicationCard.ui';
 
 interface ApplicationCardProps {
-  application: Potulation;
+  application: Postulation;
 }
 
 const ApplicationCardContainer: React.FC<ApplicationCardProps> = ({ application }) => {
   const navigate = useNavigate();
-  const { deletePotulation } = usePotulationsStore();
+  const { deletePostulation } = usePostulationsStore();
   const { id, date } = application;
   const formattedDate = new Date(date).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' });
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -28,7 +28,7 @@ const ApplicationCardContainer: React.FC<ApplicationCardProps> = ({ application 
   };
 
   const confirmDelete = () => {
-    deletePotulation(id);
+    deletePostulation(id);
     closeDeleteModal();
   };
 

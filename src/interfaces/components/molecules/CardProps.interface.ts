@@ -1,11 +1,10 @@
 import React from 'react';
 
-interface CardProps {
+export interface CardProps {
   children: React.ReactNode;
   className?: string;
+  onClick?: () => void;
+  variant?: 'default' | 'hover' | 'active';
   bgColor?: string;
-  shadow?: 'sm' | 'md' | 'lg' | 'none';
   rounded?: 'sm' | 'md' | 'lg' | 'full' | 'none';
 }
-
-export type { CardProps };

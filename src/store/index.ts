@@ -1,23 +1,22 @@
 /**
- * Punto de entrada para los stores de la aplicación
+ * Punto de entrada para todos los stores
  * Exporta todos los stores organizados por dominio
  */
 
-// Importar stores
-import { useAuthStore } from './auth/authStore';
-import { usePotulationsStore } from './potulations/potulationsStore';
+// Auth Store
+export { useAuthStore } from './auth/authStore';
 
-// Exportar stores individuales
-export { useAuthStore, usePotulationsStore };
+// Postulations Store
+export { usePostulationsStore } from './postulations/postulationsStore';
 
 // Exportar grupos con alias para mayor claridad en importaciones
 import * as AuthStore from './auth/authStore';
-import * as PotulationsStore from './potulations/potulationsStore';
+import * as PostulationsStore from './postulations/postulationsStore';
 
 // Exportar los grupos completos
 export {
   AuthStore,
-  PotulationsStore
+  PostulationsStore
 };
 
 // You can also export types if needed here

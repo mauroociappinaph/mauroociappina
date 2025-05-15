@@ -1,35 +1,34 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { PotulationState , Potulation } from '../types/index';
+import { Postulation, PostulationState } from '../../types/interface/postulations/postulation';
 
 
-
-export const usePotulationsStore = create<PotulationState>()(
+export const usePostulationsStore = create<PostulationState>()(
   persist(
     (set, get) => ({
-      potulations: [],
+      postulations: [],
 
-      addPotulation: (newPotulation) => {
+      addPostulation: (newPostulation) => {
         const timestamp = new Date().toISOString();
         const id = crypto.randomUUID();
 
-        const potulation: Potulation = {
-          ...newPotulation,
+        const postulation: Postulation = {
+          ...newPostulation,
           id,
           createdAt: timestamp,
           updatedAt: timestamp
         };
 
         set((state) => ({
-          potulations: [potulation, ...state.potulations]
+          postulations: [postulation, ...state.postulations]
         }));
 
         return id;
       },
 
-      updatePotulation: (id, updatedFields) => {
+      updatePostulation: (id, updatedFields) => {
         set((state) => ({
-          potulations: state.potulations.map(app =>
+          postulations: state.postulations.map(app =>
             app.id === id
               ? { ...app, ...updatedFields, updatedAt: new Date().toISOString() }
               : app
@@ -37,18 +36,18 @@ export const usePotulationsStore = create<PotulationState>()(
         }));
       },
 
-      deletePotulation: (id) => {
+      deletePostulation: (id) => {
         set((state) => ({
-          potulations: state.potulations.filter(app => app.id !== id)
+          postulations: state.postulations.filter(app => app.id !== id)
         }));
       },
 
-      getPotulation: (id) => {
-        return get().potulations.find(app => app.id === id);
+      getPostulation: (id) => {
+        return get().postulations.find(app => app.id === id);
       },
 
       checkDuplicate: (company, position) => {
-        return get().potulations.some(
+        return get().postulations.some(
           app => app.company.toLowerCase() === company.toLowerCase() &&
                 app.position.toLowerCase() === position.toLowerCase()
         );

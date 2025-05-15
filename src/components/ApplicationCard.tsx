@@ -1,4 +1,3 @@
-import ApplicationCardContainer from './ApplicationCard.container';
+import ApplicationCard from './organisms/ApplicationCard';
 
-// Exportar el contenedor como el componente principal
-export default ApplicationCardContainer;
+export default ApplicationCard;

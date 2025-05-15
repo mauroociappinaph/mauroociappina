@@ -1,24 +1,27 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Briefcase, User, Mail, Lock, AlertCircle } from 'lucide-react';
-import { useAuthStore } from '../store/authStore';
+import { Briefcase, User, Mail, Lock, AlertCircle, BookUser } from 'lucide-react';
+import { useAuthStore } from '../store/auth/authStore';
 import { APP_COLORS } from '../styles/colors';
 
 const Register: React.FC = () => {
   const { signUp, loading } = useAuthStore();
   const navigate = useNavigate();
   const [name, setName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-
+  const [userName, setUserName] = useState('');
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
+
+
     try {
-      await signUp(email, password, name);
-      navigate('/');
+      await signUp(email, password, name, userName, lastName);
+      navigate('/login');
     } catch (error) {
       console.log(error);
       setError('Error al crear la cuenta. Por favor, intenta nuevamente.');
@@ -76,6 +79,46 @@ const Register: React.FC = () => {
                   onChange={(e) => setName(e.target.value)}
                   className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                   placeholder="Tu nombre"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
+                Apellido
+              </label>
+              <div className="mt-1 relative rounded-md shadow-sm">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <BookUser className="h-5 w-5 text-gray-400" />
+                </div>
+                <input
+                  id="lastName"
+                  type="text"
+                  required
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  placeholder="Tu apellido"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label htmlFor="userName" className="block text-sm font-medium text-gray-700">
+                Nombre de usuario
+              </label>
+              <div className="mt-1 relative rounded-md shadow-sm">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <User className="h-5 w-5 text-gray-400" />
+                </div>
+                <input
+                  id="userName"
+                  type="text"
+                  required
+                  value={userName}
+                  onChange={(e) => setUserName(e.target.value)}
+                  className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                  placeholder="Tu nombre de usuario"
                 />
               </div>
             </div>

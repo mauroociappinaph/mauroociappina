@@ -1,24 +1,24 @@
 import { client } from './client';
-import { Potulation } from '../types';
+import { Postulation } from '../types/interface/postulations/postulation';
 
 // Definir los tipos para las solicitudes
-type CreatePostulationRequest = Omit<Potulation, 'id' | 'createdAt' | 'updatedAt'>;
-type UpdatePostulationRequest = Partial<Omit<Potulation, 'id' | 'createdAt' | 'updatedAt'>>;
+type CreatePostulationRequest = Omit<Postulation, 'id' | 'createdAt' | 'updatedAt'>;
+type UpdatePostulationRequest = Partial<Omit<Postulation, 'id' | 'createdAt' | 'updatedAt'>>;
 
 // Servicio para aplicaciones
 export const postulationsApi = {
   // Obtener todas las aplicaciones
-  getAll: () => client.get<Potulation[]>('/postulations'),
+  getAll: () => client.get<Postulation[]>('/postulations'),
 
   // Obtener una aplicación por ID
-  getById: (id: string) => client.get<Potulation>(`/postulation/${id}`),
+  getById: (id: string) => client.get<Postulation>(`/postulation/${id}`),
 
   // Crear una nueva aplicación
-  create: (data: CreatePostulationRequest) => client.post<Potulation>('/postulation', data),
+  create: (data: CreatePostulationRequest) => client.post<Postulation>('/postulation', data),
 
   // Actualizar una aplicación existente
   update: (id: string, data: UpdatePostulationRequest) =>
-    client.put<Potulation>(`/postulation/${id}`, data),
+    client.put<Postulation>(`/postulation/${id}`, data),
 
   // Eliminar una aplicación
   delete: (id: string) => client.delete<void>(`/postulation/${id}`),

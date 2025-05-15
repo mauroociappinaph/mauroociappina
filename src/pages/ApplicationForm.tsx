@@ -1,19 +1,19 @@
 import  { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useApplicationStore } from '../store';
-import { ApplicationStatus  , STATUS_LABELS} from '../types/index';
-import Modal from '../components/Modal';
+import { usePostulationsStore } from '../store';
+import { PostulationStatus  , STATUS_LABELS} from '../types/index';
+import Modal from '../components/molecules/Modal';
 import { Save, AlertCircle } from 'lucide-react';
 import { ValidationHelpers, DateHelpers } from '../lib/helpers';
 
 const ApplicationForm: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { addApplication, updateApplication, getApplication, checkDuplicate } = useApplicationStore();
+  const { addPostulation, updatePostulation, getPostulation, checkDuplicate } = usePostulationsStore();
 
   const [company, setCompany] = useState('');
   const [position, setPosition] = useState('');
-  const [status, setStatus] = useState<ApplicationStatus>('applied');
+  const [status, setStatus] = useState<PostulationStatus>('applied');
   const [date, setDate] = useState('');
   const [url, setUrl] = useState('');
   const [notes, setNotes] = useState('');
@@ -31,19 +31,19 @@ const ApplicationForm: React.FC = () => {
   // Load existing application if editing
   useEffect(() => {
     if (id) {
-      const application = getApplication(id);
-      if (application) {
-        setCompany(application.company);
-        setPosition(application.position);
-        setStatus(application.status);
-        setDate(application.date.split('T')[0]);
-        setUrl(application.url);
-        setNotes(application.notes || '');
+      const postulation = getPostulation(id);
+      if (postulation) {
+        setCompany(postulation.company);
+        setPosition(postulation.position);
+        setStatus(postulation.status);
+        setDate(postulation.date.split('T')[0]);
+          setUrl(postulation.url || '');
+        setNotes(postulation.notes || '');
       } else {
         navigate('/');
       }
     }
-  }, [id, getApplication, navigate]);
+  }, [id, getPostulation, navigate]);
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
@@ -82,7 +82,7 @@ const ApplicationForm: React.FC = () => {
     }
 
     if (id) {
-      updateApplication(id, {
+      updatePostulation(id, {
         company,
         position,
         status,
@@ -91,7 +91,7 @@ const ApplicationForm: React.FC = () => {
         notes
       });
     } else {
-      addApplication({
+      addPostulation({
         company,
         position,
         status,
@@ -107,7 +107,7 @@ const ApplicationForm: React.FC = () => {
   const handleContinueAnyway = () => {
     setShowDuplicateModal(false);
 
-    addApplication({
+    addPostulation({
       company,
       position,
       status,
@@ -182,7 +182,7 @@ const ApplicationForm: React.FC = () => {
               <select
                 id="status"
                 value={status}
-                onChange={(e) => setStatus(e.target.value as ApplicationStatus)}
+                onChange={(e) => setStatus(e.target.value as PostulationStatus)}
                 className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               >
                 {Object.entries(STATUS_LABELS).map(([value, label]) => (

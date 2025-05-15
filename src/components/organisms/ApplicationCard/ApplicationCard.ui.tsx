@@ -2,7 +2,7 @@ import React from 'react';
 import { ApplicationCardProps } from '../../../interfaces';
 import { Edit, Trash2, Calendar, AlertTriangle } from 'lucide-react';
 import { APP_COLORS } from '../../../styles/colors';
-import Modal from '../../Modal';
+import Modal from '../../molecules/Modal';
 import Card from '../../molecules/Card';
 import Button from '../../atoms/Button';
 import { StatusHelpers } from '../../../lib/helpers';
@@ -37,7 +37,7 @@ const ApplicationCardUI: React.FC<ApplicationCardUIProps> = ({
 
   return (
     <>
-      <Card bgColor={bgColor} rounded="full">
+       <Card bgColor={bgColor} rounded="full">
         <div className="p-6">
           <div className="flex items-start mb-4">
             <div

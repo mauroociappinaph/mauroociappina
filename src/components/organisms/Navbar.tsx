@@ -23,17 +23,11 @@ const Navbar: React.FC = () => {
     return (
       <header style={{ background: APP_COLORS.blue }} className="w-full shadow-md font-sans">
         <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-          <div className="flex items-center">
-
+          <Link to="/landing" className="flex items-center">
             <Briefcase className="h-7 w-7 text-white mr-2" />
-            <span className="text-xl font-bold text-white">JobTracker</span>
+            <span className="text-xl font-bold text-white">Postulate: gestor de Postulaciones</span>
+          </Link>
 
-            <Link to={user ? '/' : '/landing'} className="flex items-center">
-              <Briefcase className="h-8 w-8 text-blue-600" />
-              <span className="ml-2 text-xl font-semibold text-gray-900">Postulate: gestor de Postulaciones</span>
-            </Link>
-
-          </div>
           <div className="flex items-center space-x-4">
             <Link
               to="/login"
@@ -59,7 +53,7 @@ const Navbar: React.FC = () => {
       <div className="container mx-auto px-6 py-4 flex justify-between items-center">
         <div className="flex items-center">
           <Briefcase className="h-7 w-7 text-white mr-2" />
-          <span className="text-xl font-bold text-white">JobTracker</span>
+          <span className="text-xl font-bold text-white">Postulate: gestor de Postulaciones</span>
         </div>
 
         <div className="flex items-center space-x-6">
