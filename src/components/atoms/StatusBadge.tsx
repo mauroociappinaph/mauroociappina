@@ -1,5 +1,5 @@
 import React from 'react';
-import { ApplicationStatus, STATUS_LABELS, STATUS_COLORS } from '../types/interface/application/application';
+import { ApplicationStatus, STATUS_LABELS, STATUS_COLORS } from '../types/interface/postulations/application';
 
 interface StatusBadgeProps {
   status: ApplicationStatus;

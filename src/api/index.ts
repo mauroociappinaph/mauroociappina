@@ -2,5 +2,5 @@
 export { client } from './client';
 
 // Exportar servicios específicos
-export { applicationsApi } from './applications';
+export { postulationsApi } from './postulations';
 export { authApi } from './auth';

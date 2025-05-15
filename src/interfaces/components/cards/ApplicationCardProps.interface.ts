@@ -1,7 +1,7 @@
-import { Application } from '../../../types';
+import { Potulation } from '../../../types';
 
 interface ApplicationCardProps {
-  application: Application;
+  application: Potulation;
 }
 
 export type { ApplicationCardProps };

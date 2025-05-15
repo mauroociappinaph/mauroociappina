@@ -1,18 +1,9 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { AuthState } from '../types';
+import { UserWithPassword } from '../types/interface/auth/auth.interface';
 
-
-
-// Simulated user database
-const MOCK_USERS = [
-  {
-    id: '1',
-    email: 'demo@example.com',
-    name: 'Usuario Demo',
-    password: 'password123'
-  }
-];
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
 export const useAuthStore = create<AuthState>()(
   persist(
@@ -34,7 +25,7 @@ export const useAuthStore = create<AuthState>()(
         try {
           await new Promise(resolve => setTimeout(resolve, 1000));
 
-          const user = MOCK_USERS.find(u =>
+          const user = API_URL.find((u: UserWithPassword) =>
             u.email === email && u.password === password
           );
 
@@ -43,7 +34,7 @@ export const useAuthStore = create<AuthState>()(
             throw new Error('Credenciales inválidas');
           }
 
-          const { password: _, ...userWithoutPassword } = user;
+          const { password: _password, ...userWithoutPassword } = user;
           set({ user: userWithoutPassword, loading: false });
         } catch (error) {
           set({ loading: false });
@@ -56,21 +47,21 @@ export const useAuthStore = create<AuthState>()(
         try {
           await new Promise(resolve => setTimeout(resolve, 1000));
 
-          if (MOCK_USERS.some(u => u.email === email)) {
+          if (API_URL.some((u: UserWithPassword) => u.email === email)) {
             set({ loading: false });
             throw new Error('El email ya está registrado');
           }
 
-          const newUser = {
+          const newUser: UserWithPassword = {
             id: crypto.randomUUID(),
             email,
             name,
             password
           };
 
-          MOCK_USERS.push(newUser);
+          API_URL.push(newUser);
 
-          const { password: _, ...userWithoutPassword } = newUser;
+          const { password: _password, ...userWithoutPassword } = newUser;
           set({ user: userWithoutPassword, loading: false });
         } catch (error) {
           set({ loading: false });

@@ -1,4 +1,4 @@
-export type ApplicationStatus =
+export type PotulationStatus =
   | 'applied'
   | 'interview'
   | 'technical'
@@ -6,11 +6,11 @@ export type ApplicationStatus =
   | 'rejected'
   | 'accepted';
 
-export interface Application {
+export interface Potulation {
   id: string;
   company: string;
   position: string;
-  status: ApplicationStatus;
+  status: PotulationStatus;
   date: string;
   url: string;
   notes?: string;
@@ -18,7 +18,7 @@ export interface Application {
   updatedAt: string;
 }
 
-export const STATUS_LABELS: Record<ApplicationStatus, string> = {
+export const STATUS_LABELS: Record<PotulationStatus, string> = {
   applied: 'Aplicado',
   interview: 'Entrevista',
   technical: 'Prueba Técnica',
@@ -27,7 +27,7 @@ export const STATUS_LABELS: Record<ApplicationStatus, string> = {
   accepted: 'Aceptado'
 };
 
-export const STATUS_COLORS: Record<ApplicationStatus, string> = {
+export const STATUS_COLORS: Record<PotulationStatus, string> = {
   applied: 'bg-blue-100 text-blue-800',
   interview: 'bg-purple-100 text-purple-800',
   technical: 'bg-orange-100 text-orange-800',
@@ -37,11 +37,11 @@ export const STATUS_COLORS: Record<ApplicationStatus, string> = {
 };
 
 
-export interface ApplicationState {
-  applications: Application[];
-  addApplication: (application: Omit<Application, 'id' | 'createdAt' | 'updatedAt'>) => string;
-  updateApplication: (id: string, application: Partial<Application>) => void;
-  deleteApplication: (id: string) => void;
-  getApplication: (id: string) => Application | undefined;
+export interface PotulationState {
+  potulations: Potulation[];
+  addPotulation: (potulation: Omit<Potulation, 'id' | 'createdAt' | 'updatedAt'>) => string;
+  updatePotulation: (id: string, potulation: Partial<Potulation>) => void;
+  deletePotulation: (id: string) => void;
+  getPotulation: (id: string) => Potulation | undefined;
   checkDuplicate: (company: string, position: string) => boolean;
 }

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Briefcase } from 'lucide-react';
-import { useAuthStore } from '../store/authStore';
-import { APP_COLORS } from '../styles/colors';
+import { useAuthStore } from '../../store/auth/authStore';
+import { APP_COLORS } from '../../styles/colors';
 
 const Navbar: React.FC = () => {
   const location = useLocation();

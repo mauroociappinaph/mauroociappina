@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useApplicationStore } from '../store';
-import { ApplicationCardProps } from '../interfaces';
+import { usePotulationsStore } from '../store';
+import { Potulation } from '../types';
 import ApplicationCardUI from './ApplicationCard.ui';
+
+interface ApplicationCardProps {
+  application: Potulation;
+}
 
 const ApplicationCardContainer: React.FC<ApplicationCardProps> = ({ application }) => {
   const navigate = useNavigate();
-  const { deleteApplication } = useApplicationStore();
+  const { deletePotulation } = usePotulationsStore();
   const { id, date } = application;
   const formattedDate = new Date(date).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' });
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -24,7 +28,7 @@ const ApplicationCardContainer: React.FC<ApplicationCardProps> = ({ application 
   };
 
   const confirmDelete = () => {
-    deleteApplication(id);
+    deletePotulation(id);
     closeDeleteModal();
   };
 
@@ -47,7 +51,7 @@ const ApplicationCardContainer: React.FC<ApplicationCardProps> = ({ application 
 
   return (
     <ApplicationCardUI
-      application={application}
+        application={application}
       formattedDate={formattedDate}
       getInitials={getInitials}
       getStatusLabel={getStatusLabel}
