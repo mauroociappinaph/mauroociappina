@@ -1,0 +1,225 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+// User model (synced from Clerk)
+model User {
+  id        String   @id @map("_id")
+  email     String   @unique
+  firstName String
+  lastName  String
+  imageUrl  String?
+  status    String   @default("offline") // 'online' | 'away' | 'busy' | 'offline'
+  lastSeen  DateTime @default(now())
+
+  // User preferences
+  notificationEmail       Boolean @default(true)
+  notificationPush        Boolean @default(true)
+  notificationMentions    Boolean @default(true)
+  notificationDirectMessages Boolean @default(true)
+
+  // Working hours
+  workingHoursStart       String  @default("09:00")
+  workingHoursEnd         String  @default("17:00")
+  workingHoursTimezone    String  @default("UTC")
+  workingHoursDaysOfWeek  Int[]   @default([1, 2, 3, 4, 5]) // [1,2,3,4,5] for Mon-Fri
+
+  // Theme preference
+  theme     String   @default("system") // 'light' | 'dark' | 'system'
+
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  workspaces       WorkspaceMember[]
+  messages         Message[]
+  documents        Document[]
+  documentVersions DocumentVersion[]
+  notifications    Notification[]
+  callParticipants CallParticipant[]
+}
+
+// Workspace model
+model Workspace {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String?
+  imageUrl    String?
+  ownerId     String
+
+  // Workspace settings
+  isPublic    Boolean  @default(false)
+  allowInvites Boolean @default(true)
+  retentionDays Int     @default(30)
+
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  members     WorkspaceMember[]
+  channels    Channel[]
+  documents   Document[]
+  videoCalls  VideoCall[]
+}
+
+// Workspace member model
+model WorkspaceMember {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  workspaceId String   @db.ObjectId
+  userId      String
+  role        String   @default("member") // 'owner' | 'admin' | 'member'
+  joinedAt    DateTime @default(now())
+
+  // Relations
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([workspaceId, userId])
+}
+
+// Channel model
+model Channel {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  workspaceId String   @db.ObjectId
+  name        String
+  description String?
+  type        String   @default("text") // 'text' | 'voice' | 'announcement'
+  isPrivate   Boolean  @default(false)
+  members     String[] // User IDs
+  createdBy   String
+
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  messages    Message[]
+  videoCalls  VideoCall[]
+
+  @@unique([workspaceId, name])
+}
+
+// Message model
+model Message {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  channelId   String   @db.ObjectId
+  userId      String
+  content     String
+  type        String   @default("text") // 'text' | 'file' | 'image' | 'system'
+  attachments Json?    // Array of attachment objects
+  mentions    String[] // User IDs
+  reactions   Json?    // Array of reaction objects
+  threadId    String?  // For threaded replies
+  editedAt    DateTime?
+
+  // Timestamps
+  createdAt   DateTime @default(now())
+
+  // Relations
+  channel     Channel  @relation(fields: [channelId], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// Document model
+model Document {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  workspaceId String   @db.ObjectId
+  title       String
+  content     String   // Rich text JSON
+  tags        String[]
+  authorId    String
+  collaborators String[] // User IDs
+  version     Int      @default(1)
+  isPublished Boolean  @default(false)
+  viewCount   Int      @default(0)
+  lastViewedBy Json?   // Record<string, Date> - userId -> lastViewed
+
+  // Timestamps
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  author      User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  versions    DocumentVersion[]
+}
+
+// Document version model
+model DocumentVersion {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  documentId  String   @db.ObjectId
+  version     Int
+  content     String
+  authorId    String
+  changes     String   // Description of changes
+
+  // Timestamps
+  createdAt   DateTime @default(now())
+
+  // Relations
+  document    Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  author      User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+}
+
+// Video call model
+model VideoCall {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  workspaceId String   @db.ObjectId
+  channelId   String?  @db.ObjectId
+  title       String
+  hostId      String
+  status      String   @default("scheduled") // 'scheduled' | 'active' | 'ended'
+  startTime   DateTime
+  endTime     DateTime?
+  recordingUrl String?
+
+  // Timestamps
+  createdAt   DateTime @default(now())
+
+  // Relations
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  channel     Channel?  @relation(fields: [channelId], references: [id], onDelete: SetNull)
+  participants CallParticipant[]
+}
+
+// Call participant model
+model CallParticipant {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  callId      String   @db.ObjectId
+  userId      String
+  joinedAt    DateTime?
+  leftAt      DateTime?
+  role        String   @default("participant") // 'host' | 'participant'
+
+  // Relations
+  call        VideoCall @relation(fields: [callId], references: [id], onDelete: Cascade)
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// Notification model
+model Notification {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String
+  type        String   // 'mention' | 'direct_message' | 'call_invite' | 'document_share' | 'system'
+  title       String
+  message     String
+  data        Json     // Additional context
+  isRead      Boolean  @default(false)
+
+  // Timestamps
+  createdAt   DateTime @default(now())
+
+  // Relations
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

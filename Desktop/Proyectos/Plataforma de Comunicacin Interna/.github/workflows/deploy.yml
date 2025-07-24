@@ -1,0 +1,185 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy-frontend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint and Type Check
+        run: |
+          npm run lint:frontend
+          npm run type-check:frontend
+
+      - name: Run Tests
+        run: npm run test:frontend
+
+      - name: Build frontend
+        run: npm run build:frontend
+
+      - name: Deploy to Vercel
+        id: deploy-vercel
+        uses: amondnet/vercel-action@v20
+        with:
+          zeit-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_FRONTEND }}
+          working-directory: ./frontend
+          vercel-args: '--prod'
+
+      - name: Verify Frontend Deployment
+        id: verify-frontend
+        run: |
+          # Store the deployment URL
+          DEPLOY_URL="${{ steps.deploy-vercel.outputs.preview-url }}"
+
+          # Wait for deployment to be ready
+          echo "Waiting for deployment to be ready..."
+          sleep 30
+
+          # Check if the deployment is accessible
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" $DEPLOY_URL)
+
+          if [ $HTTP_STATUS -eq 200 ]; then
+            echo "Frontend deployment successful and accessible!"
+            exit 0
+          else
+            echo "Frontend deployment failed or not accessible. HTTP Status: $HTTP_STATUS"
+            exit 1
+          fi
+        continue-on-error: true
+
+      - name: Rollback Frontend on Failure
+        if: steps.verify-frontend.outcome == 'failure'
+        run: |
+          echo "Frontend deployment verification failed. Rolling back..."
+          npx vercel rollback --token ${{ secrets.VERCEL_TOKEN }} --scope ${{ secrets.VERCEL_ORG_ID }} --yes
+          exit 1
+
+      - name: Notify Frontend Deployment Success
+        if: success()
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: deployments
+          SLACK_TITLE: Frontend Deployed Successfully ✅
+          SLACK_MESSAGE: 'Frontend deployed successfully to Vercel'
+          SLACK_COLOR: good
+
+      - name: Notify Frontend Deployment Failure
+        if: failure()
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: deployments
+          SLACK_TITLE: Frontend Deployment Failed ❌
+          SLACK_MESSAGE: 'Frontend deployment to Vercel failed. Automatic rollback initiated.'
+          SLACK_COLOR: danger
+
+  deploy-backend:
+    runs-on: ubuntu-latest
+    needs: deploy-frontend
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint and Type Check
+        run: |
+          npm run lint:backend
+          npm run type-check:backend
+
+      - name: Run Tests
+        run: npm run test:backend
+
+      - name: Build backend
+        run: npm run build:backend
+
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+
+      - name: Deploy to Railway
+        id: deploy-railway
+        working-directory: ./backend
+        run: |
+          railway login --token ${{ secrets.RAILWAY_TOKEN }}
+          railway link ${{ secrets.RAILWAY_PROJECT_ID }}
+          # Store the current deployment ID for potential rollback
+          CURRENT_DEPLOYMENT=$(railway environment)
+          echo "CURRENT_DEPLOYMENT=$CURRENT_DEPLOYMENT" >> $GITHUB_ENV
+          # Deploy
+          railway up
+
+      - name: Verify Backend Deployment
+        id: verify-backend
+        run: |
+          # Get the backend URL from Railway
+          BACKEND_URL=$(railway variables get BACKEND_URL --token ${{ secrets.RAILWAY_TOKEN }})
+
+          # Wait for deployment to be ready
+          echo "Waiting for deployment to be ready..."
+          sleep 30
+
+          # Check if the deployment is accessible
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" $BACKEND_URL/health)
+
+          if [ $HTTP_STATUS -eq 200 ]; then
+            echo "Backend deployment successful and accessible!"
+            exit 0
+          else
+            echo "Backend deployment failed or not accessible. HTTP Status: $HTTP_STATUS"
+            exit 1
+          fi
+        continue-on-error: true
+        working-directory: ./backend
+
+      - name: Rollback Backend on Failure
+        if: steps.verify-backend.outcome == 'failure'
+        working-directory: ./backend
+        run: |
+          echo "Backend deployment verification failed. Rolling back..."
+          railway rollback --environment ${{ env.CURRENT_DEPLOYMENT }} --token ${{ secrets.RAILWAY_TOKEN }}
+          exit 1
+
+      - name: Notify Backend Deployment Success
+        if: success()
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: deployments
+          SLACK_TITLE: Backend Deployed Successfully ✅
+          SLACK_MESSAGE: 'Backend deployed successfully to Railway'
+          SLACK_COLOR: good
+
+      - name: Notify Backend Deployment Failure
+        if: failure()
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_CHANNEL: deployments
+          SLACK_TITLE: Backend Deployment Failed ❌
+          SLACK_MESSAGE: 'Backend deployment to Railway failed. Automatic rollback initiated.'
+          SLACK_COLOR: danger
