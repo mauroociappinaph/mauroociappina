@@ -1,0 +1,11 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Get the current branch name
+BRANCH=$(git symbolic-ref --short HEAD)
+
+# If pushing to main or dev, run tests
+if [ "$BRANCH" = "main" ] || [ "$BRANCH" = "dev" ]; then
+  echo "Pushing to $BRANCH branch. Running tests..."
+  npm run lint && npm run type-check && npm run test
+fi
